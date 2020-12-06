@@ -81,6 +81,9 @@
     "egulias/email-validator": {
         "version": "2.1.24"
     },
+    "fabpot/goutte": {
+        "version": "v4.0.1"
+    },
     "laminas/laminas-code": {
         "version": "3.5.1"
     },
@@ -101,6 +104,9 @@
     },
     "php": {
         "version": "7.4"
+    },
+    "php-webdriver/webdriver": {
+        "version": "1.9.0"
     },
     "phpdocumentor/reflection-common": {
         "version": "2.2.0"
@@ -325,6 +331,9 @@
     },
     "symfony/orm-pack": {
         "version": "v2.0.0"
+    },
+    "symfony/panther": {
+        "version": "v0.8.0"
     },
     "symfony/phpunit-bridge": {
         "version": "4.3",
