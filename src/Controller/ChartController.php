@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Manager\ChartManager;
 use Goutte\Client;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DomCrawler\Crawler;
@@ -11,41 +12,53 @@ use Symfony\Component\Routing\Annotation\Route;
 class ChartController extends AbstractController
 {
     /**
-     * @Route("/chart", name="chart")
+     * @var ChartManager $chartManager
      */
-    public function index(): Response
+    protected $chartManager;
+
+    /**
+     * ChartController constructor.
+     * @param ChartManager $chartManager
+     */
+    public function __construct(ChartManager $chartManager){
+        $this->chartManager = $chartManager;
+    }
+
+    /**
+     * @Route("/" , name="home")
+     */
+    public function indexAction(): Response {
+
+
+        return $this->render('index.html.twig');
+
+    }
+
+    /**
+     * @Route("/bill-hot-100", name="bill-hot-100")
+     */
+    public function billHot100Action(): Response
     {
-        // TODO-RLA: Externaliser le traitement dans un Manager dédié
-        // création du crawler
-        $client = new Client();
-        $url = "https://www.billboard.com/charts/hot-100";
-        $crawler = $client->request('GET', $url);
-        // compte les elements de la liste à racuperer
-        $elementCount = $crawler->filter('div > div > ol')->count();
-        $displayElement = [];
-        // si des eléments ont été trouvés
-        if($elementCount > 0){
-            // stock les éléments dans un objet Crawler
-            $olElementsList = $crawler->filter('div > div > ol')->children();
-            // boucle sur la liste
-            for($i = 0; $olElementsList->count() > $i; $i++) {
-                // stock un élément de la list dans un objet Crawler
-                $liElementsList = $olElementsList->filter('li')->eq($i);
-                // recupère les infos de l'element
-                $songInfo = $liElementsList->filter('button > span > span.chart-element__information__song');
-                $songArtist = $liElementsList->filter('button > span > span.chart-element__information__artist');
-                // stock les infos dans un tableau pour affichage
-                $displayElement[$i] = [$songInfo->getNode(0)->nodeValue, $songArtist->getNode(0)->nodeValue];
-            }
-            echo "Plailist de la page $url <pre>"; print_r($displayElement);echo "</pre>";
-        } else {
-            echo "No Links Found";
-        }
-        die;
+        $title ='Billboard Hot 100';
+        $displayElement = $this->chartManager->crawlBillHot100();
 
+        return $this->render('chart/index.html.twig', [
+            'display_element' => $displayElement,
+            'title' => $title,
+        ]);
+    }
 
-        /*return $this->render('chart/index.html.twig', [
-            'controller_name' => 'ChartController',
-        ]);*/
+    /**
+     * @Route("/bill-japan-hot-100", name="bill-japan-Hot-100")
+     */
+    public function billJapanHot100Action(): Response
+    {
+        $title ='Billboard Japan Hot 100';
+        $displayElement = $this->chartManager->crawlBillJapanHot100();
+
+        return $this->render('chart/index.html.twig', [
+            'display_element' => $displayElement,
+            'title' => $title,
+        ]);
     }
 }
