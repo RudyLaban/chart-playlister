@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Contact</title>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="description" content="My Podcast template project">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="styles/bootstrap-4.1.2/bootstrap.min.css">
+<link href="plugins/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+<link href="plugins/colorbox/colorbox.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="styles/contact.css">
+<link rel="stylesheet" type="text/css" href="styles/contact_responsive.css">
+<script src="https://kit.fontawesome.com/9a43e2d654.js" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<div class="super_container">
+
+	<!-- Header -->
+	{% block header %}
+		{% embed "header.html.twig" %}{% endembed %}
+	{% endblock %}
+
+	<!-- Home -->
+
+	<div class="home">
+		<div class="parallax_background parallax-window" data-parallax="scroll" data-image-src="images/contact.jpg" data-speed="0.8"></div>
+		<div class="home_container d-flex flex-column align-items-center justify-content-center">
+			<div class="home_content">
+				<div class="home_title"><h1>blog</h1></div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Contact -->
+
+	<div class="contact">
+		<div class="container">
+			<div class="row">
+				<div class="col">
+					
+					<!-- Intro -->
+					<div class="intro">
+						<div class="section_title text-center"><h1>Get in touch</h1></div>
+						<div class="intro_text text-center">
+							<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed a bibendum sem. Fusce dignissim et diam quis pretium. 
+Etiam efficitur semper accumsan. Sed et dui aliquet, ultrices tellus non, sagittis magna. Nullam justo quam, vestibulum non magna et, tempus tincidunt est. Ut laoreet magna ac luctus lacinia. Aliquam eget neque turpis. Phasellus nibh ex, tristique a magna ac, convallis tincidunt diam. Nulla facilisi. Phasellus porta sapien sit amet tortor rhoncus mattis.</p>
+						</div>
+						<div class="button_fill intro_button text-center ml-auto mr-auto"><a href="#">read more</a></div>
+					</div>
+
+					<!-- Contact Form -->
+					<div class="contact_form_container">
+						<div class="contact_form_title text-center">Send a message</div>
+						<div class="row">
+							<div class="col-lg-8 offset-lg-2">
+								<form action="#" id="contact_form" class="contact_form">
+									<div class="row">
+										<div class="col-md-6 contact_col">
+											<input type="text" class="contact_input" placeholder="Name" required="required">
+										</div>
+										<div class="col-md-6">
+											<input type="email" class="contact_input" placeholder="E-mail" required="required">
+										</div>
+									</div>
+									<div><input type="text" class="contact_input" placeholder="Subject"></div>
+									<div><textarea class="contact_input contact_textarea" placeholder="Message" required="required"></textarea></div>
+									<button class="contact_button button_fill ml-auto mr-auto">send</button>
+								</form>
+							</div>
+						</div>	
+					</div>
+
+					<!-- Google Map -->
+					<div class="google_map_container">
+						<div class="map">
+							<div id="google_map" class="google_map">
+								<div class="map_container">
+									<div id="map"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Newsletter -->
+
+	<div class="newsletter">
+		<div class="parallax_background parallax-window" data-parallax="scroll" data-image-src="images/newsletter.jpg" data-speed="0.8"></div>
+		<div class="container">
+			<div class="row">
+				<div class="col">
+					<div class="section_title light text-center"><h1>Join my Newsletter</h1></div>
+					<div class="newsletter_text text-center">
+						<p>Stay on track with the latest information about our podcasts, guests, special guest and giveaways.</p>
+					</div>
+				</div>
+			</div>
+			<div class="row newsletter_row">
+				<div class="col-lg-10 offset-lg-1">
+					<div class="newsletter_form_container">
+						<form action="#" class="newsletter_form d-flex flex-md-row flex-column align-items-md-start align-items-center justify-content-md-between justify-content-start" id="newsletter_form">
+							<input type="email" class="newsletter_input" required="required">
+							<button class="newsletter_button button_fill">subscribe now!</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Footer -->
+	{% block footer %}
+		{% embed "footer.html.twig" %}{% endembed %}
+	{% endblock %}
+</div>
+
+<script src="js/jquery-3.3.1.min.js"></script>
+<script src="styles/bootstrap-4.1.2/popper.js"></script>
+<script src="styles/bootstrap-4.1.2/bootstrap.min.js"></script>
+<script src="plugins/greensock/TweenMax.min.js"></script>
+<script src="plugins/greensock/TimelineMax.min.js"></script>
+<script src="plugins/scrollmagic/ScrollMagic.min.js"></script>
+<script src="plugins/greensock/animation.gsap.min.js"></script>
+<script src="plugins/greensock/ScrollToPlugin.min.js"></script>
+<script src="plugins/colorbox/jquery.colorbox-min.js"></script>
+<script src="plugins/easing/easing.js"></script>
+<script src="plugins/progressbar/progressbar.min.js"></script>
+<script src="plugins/parallax-js-master/parallax.min.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&key=AIzaSyCIwF204lFZg1y4kPSIhKaHEXMLYxxuMhA"></script>
+<script src="js/contact.js"></script>
+</body>
+</html>

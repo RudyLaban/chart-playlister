@@ -25,16 +25,6 @@ class ChartController extends AbstractController
     }
 
     /**
-     * @Route("/" , name="home")
-     */
-    public function indexAction(): Response {
-
-
-        return $this->render('index.html.twig');
-
-    }
-
-    /**
      * @Route("/bill-hot-100", name="bill-hot-100")
      */
     public function billHot100Action(): Response
