@@ -236,8 +236,9 @@
 	}
 	.logo a img
 	{
-		margin-left: 10px;
-		height: 74%;
+		margin: 2px 0 0 10px;
+		height: 80%;
+		width: auto;
 	}
 	.header_right
 	{

@@ -404,7 +404,8 @@ section
 .logo a img
 {
 	vertical-align: top;
-	margin-left: 5px;
+	margin: 4px 0 0 12px;
+	width: 38px;
 }
 .main_nav ul li:not(:last-of-type)
 {
