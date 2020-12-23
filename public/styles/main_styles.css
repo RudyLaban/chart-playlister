@@ -757,6 +757,10 @@ section
 	text-transform: uppercase;
 	cursor: pointer;
 }
+.alert
+{
+	top: 140px;
+}
 .track
 {
 	max-height: 166px;
