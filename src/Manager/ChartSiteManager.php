@@ -13,24 +13,16 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class ChartSiteManager
 {
-    /**
-     * @var ContainerInterface
-     */
+    /** @var ContainerInterface */
     protected $container;
 
-    /**
-     * @var EntityManagerInterface
-     */
+    /** @var EntityManagerInterface */
     public $em;
 
-    /**
-     * @var LoggerInterface
-     */
+    /** @var LoggerInterface */
     protected $logger;
 
-    /**
-     * @var  ChartSiteRepository
-     */
+    /** @var  ChartSiteRepository */
     protected $chartSiteRepo;
 
     /**
@@ -49,8 +41,8 @@ class ChartSiteManager
     /**
      * Chargé de crawler la page afin de récupérer les éléments nécessaire à la création de l'objet ChartSite
      *
-     * @param String $url
-     * @return array
+     * @param String $url Url du site de chart
+     * @return array Un tableau contenant le nom et l'url du ChartSite: ['chart_site_name' => name, 'chart_site_url' => url]
      */
     public function crawlChartSite(String $url): array
     {
@@ -66,28 +58,27 @@ class ChartSiteManager
     }
 
     /**
-     * Création du ChartSite en base
+     * Crée le ChartSite en base s'il n'extiste pas encore
      *
-     * @param String $url
-     * @param String $title
-     * @return bool
+     * @param String $url Url Du ChartSite
+     * @param String $title Nom du ChartSite
+     * @return ChartSite Le ChartSite créé
      */
-    public function createChartSite(String $url, String $title): bool
+    public function createChartSite(String $url, String $title): ChartSite
     {
-        //$chartSite = $this->em->getRepository(ChartSite::class)->findOneBy(['name' => $title]);
-        $chartSite = $this->chartSiteRepo->findOneBy(['name' => '$title']);
-        // verifies si l'objet existe déjà en base avant de le créer
-        if(empty($chartSite)) {
+        // cherche si le ChartSite existe déjà en base
+        $chartSite = $this->chartSiteRepo->findOneBy(['name' => $title]);
+        // s'il n'existe pas, on le crée
+        if(empty($chartSite))
+        {
             $chartSite = new ChartSite();
             $chartSite->setName($title);
             $chartSite->setUrl($url);
 
             $this->em->persist($chartSite);
             $this->em->flush();
-
-            return true;
         }
-        return false;
+        return $chartSite;
     }
 
 }
