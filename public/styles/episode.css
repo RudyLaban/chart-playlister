@@ -227,6 +227,10 @@ section
 	width: 100%;
 	overflow: hidden;
 }
+.alert
+{
+	top: 100px;
+}
 .prlx_parent
 {
 	overflow: hidden;

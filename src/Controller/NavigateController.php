@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\Chart;
 use App\Form\ChartFormType;
 use App\Manager\ArtistManager;
 use App\Manager\ChartManager;
@@ -54,6 +53,11 @@ class NavigateController extends AbstractController
     }
 
     /**
+     * Route vers la page d'accueil :
+     *      - Formulaire de soumission de chart
+     *      - En cas de formulaire valide, création de la Chart et des Entités associées,
+     *        puis redirection vers la page de la Chart.
+     *
      * @Route("/home" , name="home")
      * @param Request $request
      * @return Response
@@ -92,27 +96,17 @@ class NavigateController extends AbstractController
                 // on crée en base les Song de la Chart si ils n'existent pas
                 $this->songManager->createSongsOfChart($chartSongsElements);
                 // on crée en base les ChartSong si ils n'existent pas
-                $this->chartSongManager->createChartSongs($chartSongsElements, $chart);
                 // si ils existent, ont met à jours le champs position
+                $this->chartSongManager->createChartSongs($chartSongsElements, $chart);
+                // redirection vers la page de la chart créée avec le flash message qui pete sec
                 $this->addFlash('success', 'La playlist a bien été créée !');
-                return $this->render('chart/index.html.twig', [
-                    'display_element' => $chartSongsElements,
-                    'title' => 'Titre à définir mais ca à marché 😀',
-                ]);
+                return $this->redirectToRoute('show_chart', ['chartSiteId' => $chartSite->getId(), 'chartId' => $chart->getId()]);
             }
         }
 
         return $this->render('navigate/index.html.twig', [
             'chartForm' => $form->createView(),
         ]);
-    }
-
-    /**
-     * @Route("/playlist" , name="playlist")
-     */
-    public function playlistAction(): Response
-    {
-        return $this->render('navigate/episode.html.twig');
     }
 
     /**

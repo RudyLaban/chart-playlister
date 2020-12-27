@@ -2,7 +2,7 @@
 
     <!-- Logo -->
     <div class="logo">
-        <a href="{{ path('home') }}"><span>chart</span>playlister<img src="images/play.png" alt=""></a>
+        <a href="{{ path('home') }}"><span>chart</span>playlister<img src="{{ asset('/images/play.png') }}" alt=""></a>
     </div>
 
     {% block test %}
@@ -13,7 +13,6 @@
                     <nav class="main_nav">
                         <ul class="d-flex flex-row align-items-start justify-content-start">
                             <li><a href="{{ path('home') }}">{% trans %}Accueil{% endtrans %}</a></li>
-                            <li><a href="{{ path('playlist') }}">{% trans %}Playlist{% endtrans %}</a></li>
                             <li><a href="{{ path('playlists') }}">{% trans %}Playlists{% endtrans %}</a></li>
                             <li><a href="{{ path('blog') }}">{% trans %}Blog{% endtrans %}</a></li>
                             <li><a href="{{ path('about') }}">{% trans %}En savoir plus{% endtrans %}</a></li>
@@ -52,7 +51,6 @@
 <div class="menu">
     <div class="menu_content d-flex flex-column align-items-end justify-content-start">
         <ul class="menu_nav_list text-right">
-            <li><a href="{{ path('playlist') }}">{% trans %}Playlist{% endtrans %}</a></li>
             <li><a href="{{ path('playlists') }}">{% trans %}Playlists{% endtrans %}</a></li>
             <li><a href="{{ path('blog') }}">{% trans %}Blog{% endtrans %}</a></li>
             <li><a href="{{ path('about') }}">{% trans %}En savoir plus{% endtrans %}</a></li>

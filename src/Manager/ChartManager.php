@@ -60,12 +60,11 @@ class ChartManager
         $client = new Client();
         $crawler = $client->request('GET', $url);
 
-        $chartCrawler = $crawler->filter('title');
-        $chartValue = $chartCrawler->getNode(0)->nodeValue;
-        $chartExplode = explode(' | ', $chartValue);
+        $chartValue = $crawler->filter('meta[property="title"]')->eq(0)->attr('content');
+        $chartValue = str_ireplace(' chart', '', $chartValue);
 
-        // recuperation du nom du site et du titre de la chart
-        return ['chart_name' => $chartExplode[0], 'chart_url' => $url];
+        // renvoi le nom de la chart et son url
+        return ['chart_name' => $chartValue, 'chart_url' => $url];
     }
 
     /**

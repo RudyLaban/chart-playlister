@@ -106,14 +106,18 @@ class ChartSongManager
             for ($i = 0; $olElementsList->count() > $i; $i++) {
                 // stock un élément de la list dans un objet Crawler
                 $liElementsList = $olElementsList->filter('li')->eq($i);
-                // recupère les infos de l'element
-                $songInfo = $liElementsList->filter('button > span > span.chart-element__information__song');
-                $songArtist = $liElementsList->filter('button > span > span.chart-element__information__artist');
+                // récupère les l'éléments
+                $songInfoCrawler = $liElementsList->filter('button > span > span.chart-element__information__song');
+                $songArtistCrawler = $liElementsList->filter('button > span > span.chart-element__information__artist');
+                /// récupère les valeurs des éléments en supprimant les espaces
+                $songInfo = trim($songInfoCrawler->getNode(0)->nodeValue);
+                $songArtist = trim($songArtistCrawler->getNode(0)->nodeValue);
                 // stock les infos dans un tableau pour affichage
                 $displayElement[$i+1] = [
                     'position' => $i+1,
-                    'song' => $songInfo->getNode(0)->nodeValue,
-                    'artist' => $songArtist->getNode(0)->nodeValue];
+                    'song' => $songInfo,
+                    'artist' => $songArtist
+                ];
             }
         }
         return $displayElement;
@@ -129,10 +133,10 @@ class ChartSongManager
         $client = new Client();
         $crawler = $client->request('GET', $url);
         // compte les elements de la liste à racuperer
-        $listItemCout = $crawler->filter('div > div.chart-list-item')->count();
+        $listItemCount = $crawler->filter('div > div.chart-list-item')->count();
         $displayElement = [];
-        // si des eléments ont été trouvés
-        if ($listItemCout > 0) {
+        // si des éléments ont été trouvés
+        if ($listItemCount > 0) {
             // stock les éléments dans un objet Crawler
             //$listItem = $crawler->filter('div > div.chart-list')->children();
             $listItem = $crawler->filter('div > div.chart-list-item');
@@ -140,18 +144,19 @@ class ChartSongManager
             for ($i = 0; $listItem->count() > $i; $i++) {
                 // stock un élément de la list dans un objet Crawler
                 $liElementsList = $listItem->filter('div.chart-list-item__text')->eq($i);
-                // recupère les infos de l'element
-                $songInfoCr = $liElementsList->filter('div.chart-list-item__title > span');
-                $songInfoNode = $songInfoCr->getNode(0)->textContent;
-                $songArtistCr = $liElementsList->filter('div.chart-list-item__artist');
-                $songArtistNode = $songArtistCr->getNode(0)->nodeValue;
+                // récupère les l'éléments
+                $songInfoCrawler = $liElementsList->filter('div.chart-list-item__title > span');
+                $songArtistCrawler = $liElementsList->filter('div.chart-list-item__artist');
+                // récupère les valeurs des éléments en supprimant les espaces
+                $songInfo = trim($songInfoCrawler->getNode(0)->textContent);
+                $songArtist = trim($songArtistCrawler->getNode(0)->nodeValue);
                 // stock les infos dans un tableau pour affichage
                 $displayElement[$i+1] = [
                     'position' => $i+1,
-                    'song' => str_replace("\n","", $songInfoNode),
-                    'artist' => str_replace("\n","", $songArtistNode)];
+                    'song' => $songInfo,
+                    'artist' => $songArtist
+                ];
             }
-
         }
         return $displayElement;
     }
@@ -199,15 +204,17 @@ class ChartSongManager
             $chartSong->setPosition($position);
             $chartSong->setChart($chart);
             $chartSong->setSong($song);
+
+            $this->em->persist($chartSong);
+            $this->em->flush();
         }
         else { // s'il existe, on verifies si sa position doit être mise à jour
             if ($chartSong->getPosition() != $position)
             {
                 $chartSong->setPosition($position);
+                $this->em->flush();
             }
         }
-        $this->em->persist($chartSong);
-        $this->em->flush();
 
         return $chartSong;
     }
