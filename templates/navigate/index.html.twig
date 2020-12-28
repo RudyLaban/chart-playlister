@@ -87,26 +87,27 @@
 	<div class="shows">
 		<div class="container">
 			<div class="row shows_row">
-				
 				<!-- Show -->
+				{% for chart in charts %}
 				<div class="col-lg-4">
 					<div class="show">
 						<div class="show_image">
-							<a href="episode.html.twig">
+							<a href="{{ path('show_chart', {chartSiteId: chart.chartSite.id, chartId: chart.id}) }}">
 								<img src="images/show_1.png" alt="https://unsplash.com/@icons8">
 							</a>
 							<div class="show_tags">
 								<div class="tags">
 									<ul class="d-flex flex-row align-items-start justify-content-start">
-										<li><a href="#">Music</a></li>
+										<li><a href="#">{{ chart.chartSite.name }}</a></li>
 									</ul>
 								</div>
 							</div>
 							<div class="show_play_icon"><img src="images/play.svg" alt="https://www.flaticon.com/authors/cole-bemis"></div>
 						</div>
 						<div class="show_content">
-							<div class="show_date"><a href="#">24 September, 2018</a></div>
-							<div class="show_title"><a href="episode.html.twig">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</a></div>
+							<div class="show_title">
+								<a href="{{ path('show_chart', {chartSiteId: chart.chartSite.id, chartId: chart.id}) }}">{{ chart.name }}</a>
+							</div>
 							<div class="show_info d-flex flex-row align-items-start justify-content-start">
 								<div class="show_fav d-flex flex-row align-items-center justify-content-start">
 									<div class="show_fav_icon show_info_icon"><img class="svg" src="images/heart.svg" alt=""></div>
@@ -124,81 +125,7 @@
 						</div>
 					</div>
 				</div>
-
-				<!-- Show -->
-				<div class="col-lg-4">
-					<div class="show">
-						<div class="show_image">
-							<a href="episode.html.twig">
-								<img src="images/show_2.png" alt="https://unsplash.com/@pawel_czerwinski">
-							</a>
-							<div class="show_tags">
-								<div class="tags">
-									<ul class="d-flex flex-row align-items-start justify-content-start">
-										<li><a href="#">Experiment</a></li>
-									</ul>
-								</div>
-							</div>
-							<div class="show_play_icon"><img src="images/play.svg" alt="https://www.flaticon.com/authors/cole-bemis"></div>
-						</div>
-						<div class="show_content">
-							<div class="show_date"><a href="#">24 September, 2018</a></div>
-							<div class="show_title"><a href="episode.html.twig">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</a></div>
-							<div class="show_info d-flex flex-row align-items-start justify-content-start">
-								<div class="show_fav d-flex flex-row align-items-center justify-content-start">
-									<div class="show_fav_icon show_info_icon"><img class="svg" src="images/heart.svg" alt=""></div>
-									<div class="show_fav_count">2371</div>
-								</div>
-								<div class="show_comments">
-									<a href="#">
-										<div class="d-flex flex-row align-items-center justify-content-start">
-											<div class="show_comments_icon show_info_icon"><img class="svg" src="images/speech-bubble.svg" alt=""></div>
-											<div class="show_comments_count">88 Commentaires</div>
-										</div>
-									</a>	
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<!-- Show -->
-				<div class="col-lg-4">
-					<div class="show">
-						<div class="show_image">
-							<a href="episode.html.twig">
-								<img src="images/show_3.png" alt="https://unsplash.com/@trevcole">
-							</a>
-							<div class="show_tags">
-								<div class="tags">
-									<ul class="d-flex flex-row align-items-start justify-content-start">
-										<li><a href="#">Music</a></li>
-									</ul>
-								</div>
-							</div>
-							<div class="show_play_icon"><img src="images/play.svg" alt="https://www.flaticon.com/authors/cole-bemis"></div>
-						</div>
-						<div class="show_content">
-							<div class="show_date"><a href="#">24 September, 2018</a></div>
-							<div class="show_title"><a href="episode.html.twig">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</a></div>
-							<div class="show_info d-flex flex-row align-items-start justify-content-start">
-								<div class="show_fav d-flex flex-row align-items-center justify-content-start">
-									<div class="show_fav_icon show_info_icon"><img class="svg" src="images/heart.svg" alt=""></div>
-									<div class="show_fav_count">2371</div>
-								</div>
-								<div class="show_comments">
-									<a href="#">
-										<div class="d-flex flex-row align-items-center justify-content-start">
-											<div class="show_comments_icon show_info_icon"><img class="svg" src="images/speech-bubble.svg" alt=""></div>
-											<div class="show_comments_count">88 Commentaires</div>
-										</div>
-									</a>	
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-
+				{% endfor %}
 			</div>
 			<div class="row">
 				<div class="col text-center">
@@ -353,18 +280,18 @@
 	{% endblock %}
 </div>
 
-<script src="js/jquery-3.3.1.min.js"></script>
-<script src="styles/bootstrap-4.1.2/popper.js"></script>
-<script src="styles/bootstrap-4.1.2/bootstrap.min.js"></script>
-<script src="plugins/greensock/TweenMax.min.js"></script>
-<script src="plugins/greensock/TimelineMax.min.js"></script>
-<script src="plugins/scrollmagic/ScrollMagic.min.js"></script>
-<script src="plugins/greensock/animation.gsap.min.js"></script>
-<script src="plugins/greensock/ScrollToPlugin.min.js"></script>
-<script src="plugins/easing/easing.js"></script>
-<script src="plugins/colorbox/jquery.colorbox-min.js"></script>
-<script src="plugins/progressbar/progressbar.min.js"></script>
-<script src="plugins/parallax-js-master/parallax.min.js"></script>
-<script src="js/custom.js"></script>
+<script src="{{ asset('js/jquery-3.3.1.min.js') }}"></script>
+<script src="{{ asset('styles/bootstrap-4.1.2/popper.js') }}"></script>
+<script src="{{ asset('styles/bootstrap-4.1.2/bootstrap.min.js') }}"></script>
+<script src="{{ asset('plugins/greensock/TweenMax.min.js') }}"></script>
+<script src="{{ asset('plugins/greensock/TimelineMax.min.js') }}"></script>
+<script src="{{ asset('plugins/scrollmagic/ScrollMagic.min.js') }}"></script>
+<script src="{{ asset('plugins/greensock/animation.gsap.min.js') }}"></script>
+<script src="{{ asset('plugins/greensock/ScrollToPlugin.min.js') }}"></script>
+<script src="{{ asset('plugins/easing/easing.js') }}"></script>
+<script src="{{ asset('plugins/colorbox/jquery.colorbox-min.js') }}"></script>
+<script src="{{ asset('plugins/progressbar/progressbar.min.js') }}"></script>
+<script src="{{ asset('plugins/parallax-js-master/parallax.min.js') }}"></script>
+<script src="{{ asset('js/custom.js') }}"></script>
 </body>
 </html>

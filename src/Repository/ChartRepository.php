@@ -19,22 +19,19 @@ class ChartRepository extends ServiceEntityRepository
         parent::__construct($registry, Chart::class);
     }
 
-    // /**
-    //  * @return Chart[] Returns an array of Chart objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+     * @return Chart[] Retourne les 3 dernières Chart
+     */
+    public function findThreeLastChart(): array
     {
         return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('c.id', 'ASC')
-            ->setMaxResults(10)
+            ->orderBy('c.id', 'DESC')
+            ->setMaxResults(3)
             ->getQuery()
             ->getResult()
         ;
     }
-    */
+
 
     /*
     public function findOneBySomeField($value): ?Chart

@@ -161,6 +161,14 @@ section
 	position: relative;
 	box-sizing: border-box;
 }
+thead
+{
+	font-size: 16px;
+}
+tr
+{
+	color: #515151;
+}
 .clear
 {
 	clear: both;
@@ -231,6 +239,7 @@ section
 {
 	top: 100px;
 }
+
 .prlx_parent
 {
 	overflow: hidden;
