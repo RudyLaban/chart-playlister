@@ -110,7 +110,7 @@
 	}
 	.episodes_col
 	{
-		margin-top: 100px;
+		margin-top: 60px;
 	}
 	.footer_content_row > div[class^='col']:not(:last-child)
 	{
@@ -154,10 +154,6 @@
 	.home_title h1
 	{
 		font-size: 48px;
-	}
-	.show_info
-	{
-		display: none !important;
 	}
 	.episode_name a
 	{

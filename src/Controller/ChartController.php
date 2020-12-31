@@ -14,6 +14,7 @@ use App\Repository\SongRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Container\ContainerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -100,6 +101,27 @@ class ChartController extends AbstractController
             'chart_site_name' => $chartSite->getName(),
             'data' => $data,
         ]);
+    }
+
+    /**
+     * Route menant à la liste de toutes les Charts
+     *
+     * @Route("/charts", name="charts")
+     * @return RedirectResponse|Response
+     */
+    public function showAllCharts()
+    {
+        $chartList = $this->chartRepo->findAll();
+
+        if (!$chartList) {
+            $this->addFlash('warning', 'Aucunes playlist n\'existe pour le moment.');
+            return $this->redirectToRoute('home');
+        }
+
+        return $this->render('navigate/episodes.html.twig', [
+            'charts' => $chartList,
+        ]);
+
     }
 
     /**

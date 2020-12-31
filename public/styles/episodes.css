@@ -930,10 +930,28 @@ section
 7. Episodes
 *********************************/
 
+.col-lg-9
+{
+	display: flex;
+	flex-wrap: wrap;
+}
+.col-lg-4
+{
+	padding-bottom: 35px;
+}
+.card
+{
+	width: 100%;
+}
+.card-body
+{
+	background-color: #f6f6f6;
+	padding-bottom: 1rem;
+}
 .episodes
 {
 	background: #FFFFFF;
-	padding-top: 79px;
+	padding-top: 40px;
 	padding-bottom: 99px;
 }
 .season_links ul li:not(:last-of-type)
@@ -950,10 +968,6 @@ section
 .season_links ul li:hover
 {
 	color: #ff3500;
-}
-.episodes_row
-{
-	margin-top: 79px;
 }
 .episodes_container
 {
@@ -1023,9 +1037,13 @@ section
 	padding-right: 30px;
 	padding-bottom: 10px;
 }
+.episode_name
+{
+	min-height: 50px;
+}
 .episode_name a
 {
-	font-size: 18px;
+	font-size: 20px;
 	font-weight: 500;
 	color: #2e3038;
 	line-height: 1.2;
@@ -1041,27 +1059,39 @@ section
 	color: #2e3038;
 }
 .episode_name a:hover,
-.episode_date a:hover
+.episode_date a:hover,
+.show_fav a:hover
 {
 	color: #ff3500;
 }
+.fa
+{
+	font-size: 22px;
+}
+.show-chart
+{
+	display: inline;
+}
+.show-chart a
+{
+	vertical-align: top;
+	color: #5a6268;
+	margin-left: 5px;
+}
 .show_info
 {
-	margin-top: 11px;
-}
-.show_fav
-{
-	margin-left: -3px;
+	margin: 15px 0 10px 0;
 }
 .show_fav_icon
 {
-	width: 26px;
-	height: 26px;
+	width: 22px;
+	height: 22px;
+	bottom: 2px;
 	cursor: pointer;
 }
 .show_comments
 {
-	margin-left: 17px;
+	margin-left: 20px;
 }
 .show_comments a
 {

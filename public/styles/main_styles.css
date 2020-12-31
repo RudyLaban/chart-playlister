@@ -845,6 +845,7 @@ section
 .show_title
 {
 	margin-top: 11px;
+	min-height: 54px;
 }
 .show_title a
 {
@@ -945,6 +946,10 @@ section
 	-ms-transform: translate(-50%, -50%) scale(1);
 	-o-transform: translate(-50%, -50%) scale(1);
 	transform: translate(-50%, -50%) scale(1);
+}
+i.fa-music
+{
+	font-size: 22px;
 }
 
 /*********************************

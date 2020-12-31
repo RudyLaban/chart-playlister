@@ -69,9 +69,12 @@
 				<div class="row home_row">
 					<div class="col-lg-10 offset-lg-1">
 						<div class="home_form_container">
-							{{ form_start(chartForm, {'attr':
-								{'class': 'home_form d-flex flex-md-row flex-column align-items-md-start align-items-center justify-content-md-between justify-content-start'}
-							}) }}
+							{{ form_start
+								(chartForm,
+								{'attr':
+									{'class': 'home_form d-flex flex-md-row flex-column align-items-md-start align-items-center justify-content-md-between justify-content-start'}
+								})
+							}}
 								{{ form_widget(chartForm.url) }}
 								{{ form_widget(chartForm.save) }}
 							{{ form_end(chartForm) }}
@@ -110,8 +113,8 @@
 							</div>
 							<div class="show_info d-flex flex-row align-items-start justify-content-start">
 								<div class="show_fav d-flex flex-row align-items-center justify-content-start">
-									<div class="show_fav_icon show_info_icon"><img class="svg" src="images/heart.svg" alt=""></div>
-									<div class="show_fav_count">2371</div>
+									<i class="fa fa-music" aria-hidden="true"></i>
+									<div class="show_fav_count">{{ chart.chartSongs|length }}</div>
 								</div>
 								<div class="show_comments">
 									<a href="#">
