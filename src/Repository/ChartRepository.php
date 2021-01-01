@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Chart;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -30,6 +31,16 @@ class ChartRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult()
         ;
+    }
+
+    /**
+     * @return Query La requête récupérant toutes les Charts
+     */
+    public function findAllChartQuery(): Query
+    {
+        return $this->createQueryBuilder('c')
+            ->orderBy('c.id','DESC')
+            ->getQuery();
     }
 
 

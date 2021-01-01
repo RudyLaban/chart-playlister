@@ -12,9 +12,11 @@ use App\Repository\ChartSiteRepository;
 use App\Repository\ChartSongRepository;
 use App\Repository\SongRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Psr\Container\ContainerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -107,13 +109,17 @@ class ChartController extends AbstractController
      * Route menant à la liste de toutes les Charts
      *
      * @Route("/charts", name="charts")
+     * @param PaginatorInterface $paginator
+     * @param Request $request
      * @return RedirectResponse|Response
      */
-    public function showAllCharts()
+    public function showAllCharts(PaginatorInterface $paginator, Request $request)
     {
-        $chartList = $this->chartRepo->findAll();
+        // formatage de la requête en utilisant le paginator
+        $chartList = $paginator->paginate($this->chartRepo->findAllChartQuery(), $request->query->getInt('page',1),6);
 
-        if (!$chartList) {
+        if (!$chartList)
+        {
             $this->addFlash('warning', 'Aucunes playlist n\'existe pour le moment.');
             return $this->redirectToRoute('home');
         }
