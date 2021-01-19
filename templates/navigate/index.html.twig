@@ -96,7 +96,7 @@
 					<div class="show">
 						<div class="show_image">
 							<a href="{{ path('show_chart', {chartSiteId: chart.chartSite.id, chartId: chart.id}) }}">
-								<img src="images/show_1.png" alt="https://unsplash.com/@icons8">
+								<img src="{{ uploaded_asset(chart.imageFileName) }}" alt="https://unsplash.com/@icons8">
 							</a>
 							<div class="show_tags">
 								<div class="tags">
@@ -132,7 +132,7 @@
 			</div>
 			<div class="row">
 				<div class="col text-center">
-					<div class="button_fill shows_button"><a href="#">plus de playlist</a></div>
+					<div class="button_fill shows_button"><a href="{{ path('charts') }}">plus de playlist</a></div>
 				</div>
 			</div>
 		</div>

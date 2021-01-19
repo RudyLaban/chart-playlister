@@ -6,15 +6,18 @@ use App\Entity\Chart;
 use App\Entity\ChartSite;
 use App\Entity\ChartSong;
 use App\Entity\Song;
+use App\Form\ChartAddImageType;
 use App\Manager\ChartManager;
 use App\Repository\ChartRepository;
 use App\Repository\ChartSiteRepository;
 use App\Repository\ChartSongRepository;
 use App\Repository\SongRepository;
+use App\Service\UploaderHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Psr\Container\ContainerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -62,13 +65,15 @@ class ChartController extends AbstractController
 
     /**
      * Route menant à la chart envoyée en paramètre
-     *
+     * Todo-rla : Simplifier les paramètres envoyé dans le render
      * @Route("/chart_site/{chartSiteId}/chart/{chartId}", name="show_chart")
      * @param int $chartSiteId Id du ChartSite de la Chart
      * @param int $chartId Id de la Chart
+     * @param Request $request
+     * @param UploaderHelper $uploaderHelper
      * @return Response
      */
-    public function showChart(int $chartSiteId, int $chartId): Response
+    public function showChart(int $chartSiteId, int $chartId, Request $request, UploaderHelper $uploaderHelper): Response
     {
         $elementOfChartSong = [];
         $data = [];
@@ -80,6 +85,36 @@ class ChartController extends AbstractController
         {
             throw $this->createNotFoundException('La Chart '.$chartId.' du site '.$chartSiteId.' n\'a pas été trouvée.');
         }
+
+        // formulaire de soumissions d'image pour une chart
+        $form = $this->createForm(ChartAddImageType::class);
+        // récupération du formulaire
+        $form->handleRequest($request);
+        // le formulaire est soumis et valide
+        if($form->isSubmitted() && $form->isValid())
+        {
+            // récupération de de l'image dans le form
+            /** @var UploadedFile $uploadedFile */
+            $uploadedFile = $form['imageFile']->getData();
+            if ($uploadedFile) {
+                // utilisation du service UploaderHelper
+                $newFilename = $uploaderHelper->uploadChartImage($uploadedFile, $chart);
+                // set de l'image
+                $chart->setImageFileName($newFilename);
+                $this->em->persist($chart);
+                $this->em->flush();
+
+                $this->addFlash('success', 'La pochette de la playlist '. $chart->getName() .' a bien été mise à jours.');
+            }
+        }
+        else {
+            // récupération du message d'erreur si le form n'est pas valide
+            $errorMessage = $form->all()['imageFile']->getErrors()->getChildren()->getMessage();
+            $this->addFlash('warning', $errorMessage);
+        }
+
+
+
         // récupération des ChartSong de la Chart
         $chartSongs = $chart->getChartSongs();
 
@@ -99,6 +134,8 @@ class ChartController extends AbstractController
         }
 
         return $this->render('navigate/episode.html.twig', [
+            'chart' => $chart,
+            'chartAddImageForm' => $form->createView(),
             'chart_name' => $chart->getName(),
             'chart_site_name' => $chartSite->getName(),
             'data' => $data,
@@ -128,33 +165,5 @@ class ChartController extends AbstractController
             'charts' => $chartList,
         ]);
 
-    }
-
-    /**
-     * @Route("/bill-hot-100", name="bill-hot-100")
-     */
-    public function billHot100Action(): Response
-    {
-        $title ='Billboard Hot 100';
-        $displayElement = $this->chartManager->crawlBillHot100();
-
-        return $this->render('chart/index.html.twig', [
-            'display_element' => $displayElement,
-            'title' => $title,
-        ]);
-    }
-
-    /**
-     * @Route("/bill-japan-hot-100", name="bill-japan-Hot-100")
-     */
-    public function billJapanHot100Action(): Response
-    {
-        $title ='Billboard Japan Hot 100';
-        $displayElement = $this->chartManager->crawlBillJapanHot100();
-
-        return $this->render('chart/index.html.twig', [
-            'display_element' => $displayElement,
-            'title' => $title,
-        ]);
     }
 }

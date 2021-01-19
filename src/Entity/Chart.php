@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\ChartRepository;
+use App\Service\UploaderHelper;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -30,6 +31,11 @@ class Chart
      * @ORM\Column(type="string", length=255)
      */
     private $url;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $imageFileName;
 
     /**
      * @ORM\ManyToOne(targetEntity=ChartSite::class, inversedBy="charts")
@@ -78,6 +84,18 @@ class Chart
     public function setUrl(string $url): self
     {
         $this->url = $url;
+
+        return $this;
+    }
+
+    public function getImageFileName(): ?string
+    {
+        return UploaderHelper::CHART_IMAGE.'/'.$this->imageFileName;
+    }
+
+    public function setImageFileName(?string $imageFileName): self
+    {
+        $this->imageFileName = $imageFileName;
 
         return $this;
     }

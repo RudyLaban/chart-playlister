@@ -227,3 +227,18 @@ $(document).ready(function()
 	}
 
 });
+// affichage dynamique de la preview a la modification de la pochette de playlist
+// et affichage du bouton enregistrer
+document.getElementById('chart_add_image_imageFile').addEventListener('change', readURL, true);
+function readURL(){
+	let file = document.getElementById("chart_add_image_imageFile").files[0];
+	let reader = new FileReader();
+	reader.onloadend = function(){
+		document.getElementById('chart-img').src = reader.result;
+		document.getElementById("chart_add_image_save").style.display = "block";
+	}
+	if(file){
+		reader.readAsDataURL(file);
+	}else{
+	}
+}

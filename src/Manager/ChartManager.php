@@ -85,6 +85,8 @@ class ChartManager
             $chart->setName($chartElement['chart_name']);
             $chart->setUrl($chartElement['chart_url']);
             $chart->setChartSite($chartSite);
+            // on set l'image par défaut en pochette de Chart
+            $chart->setImageFileName('default_chart_image.png');
 
             $this->em->persist($chart);
             $this->em->flush();

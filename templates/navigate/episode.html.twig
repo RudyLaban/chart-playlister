@@ -79,22 +79,31 @@
 		</div>
 	</div>
 
-	<!-- Episode -->
+	<!-- Chart -->
 
 	<div class="episode_container">
-
-		<!-- Episode Image -->
+		<!-- Image de la Chart -->
 		<div class="episode_image_container">
 			<div class="container">
 				<div class="row">
-					<div class="col-lg-3">
-						<!-- Episode Image -->
-						<div class="episode_image"><img src="{{ asset('images/episode_2.jpg') }}" alt=""></div>
+					<div class="col-lg-3" id="chart-upload">
+						<!-- Formulaire de changement de pochette de la Chart -->
+						{{ form_start(chartAddImageForm) }}
+						{{ form_errors(chartAddImageForm) }}
+						<div class="episode_image" id="get-value" >
+							<img id="chart-img" src="{{ uploaded_asset(chart.imageFileName) }}" alt="">
+							<div class="overlay">
+								<div class="text">Changer la pochette</div>
+							</div>
+							{{ form_widget(chartAddImageForm.imageFile) }}
+						</div>
 					</div>
+							{{ form_widget(chartAddImageForm.save, {'attr': {'class': 'comment_button button_fill'}}) }}
+						{{ form_end(chartAddImageForm) }}
 				</div>
+
 			</div>
 		</div>
-
 		<div class="container">
 			<div class="row">
 				
@@ -155,7 +164,7 @@
 					</div>
 				</div>
 
-				<!-- Episode -->
+				<!-- Contenue de la Chart -->
 				<div class="col-lg-9 episode_col order-lg-2 order-1">
 					<div class="section_title">{% trans %}Contenue de la playlist{% endtrans %}</div>
 					<table class="table table-striped" style="margin-top : 30px;">
