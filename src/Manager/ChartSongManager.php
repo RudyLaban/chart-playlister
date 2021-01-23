@@ -11,7 +11,6 @@ use App\Repository\ChartRepository;
 use App\Repository\SongRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Goutte\Client;
-use phpDocumentor\Reflection\Types\This;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -39,10 +38,6 @@ class ChartSongManager
      * @var LoggerInterface
      */
     protected $logger;
-
-    protected const URL_BILl_JAPAN_HOT_100 = "https://www.billboard.com/charts/japan-hot-100";
-    protected const URL_BILl_HOT_100 = "https://www.billboard.com/charts/hot-100";
-    protected const URL_BILl_200 = "https://www.billboard.com/charts/billboard-200";
 
     /**
      * ChartSongManager constructor.
@@ -89,7 +84,7 @@ class ChartSongManager
      * @param String $url
      * @return array
      */
-    public function crawlBillHot100(String $url = self::URL_BILl_HOT_100): array
+    public function crawlBillHot100(String $url): array
     {
         // création du crawler
         $client = new Client();
@@ -127,7 +122,7 @@ class ChartSongManager
      * @param string $url
      * @return array
      */
-    public function crawlBillJapanHot100($url = self::URL_BILl_JAPAN_HOT_100): array
+    public function crawlBillJapanHot100(string $url): array
     {
         // création du crawler
         $client = new Client();
@@ -165,7 +160,7 @@ class ChartSongManager
      * Crée tous les ChartSong d'une Chart. S'ils existent, met leur position à jours si besoin
      *
      * @param array $chartSongsElements Une liste contenant les infos des ChartSong à créer :
-     * chartSongsElements[element['position' => int, 'song' => String, 'artist" => String]]
+     *      chartSongsElements[element['position' => int, 'song' => String, 'artist" => String]]
      * @param Chart $chart La Chart liée
      * @return array La liste des ChartSong Créé
      */
@@ -179,11 +174,23 @@ class ChartSongManager
             $chartSong = $this->createChartSong($chartSongsElement['position'], $song, $chart);
             array_push($chartSongList, $chartSong);
         }
+
+        // verifies via la liste des ChartSong créés s'il y en a à supprimer
+        $allChartSongList = $chart->getChartSongs();
+        foreach($allChartSongList as $chartSong)
+        {
+            if(array_search($chartSong, $chartSongList) === false)
+            {
+                $this->deleteChartSong($chartSong);
+            }
+        }
+
         return $chartSongList;
     }
 
     /**
-     * Création en base d'un ChartSong. S'il existe, met à jour sa position si besoin
+     * Création en base d'un ChartSong.
+     * S'il n'existe pas, on le crée
      *
      * @param Int $position La position du ChartSong
      * @param Song $song Le Song lié
@@ -197,26 +204,46 @@ class ChartSongManager
             'song'  => $song->getId(),
             'chart' => $chart->getId(),
         ]);
+
+        // cherche un ChartSong de la Chart avec la même position afin de le remplacer par le nouveau
+        /** @var ChartSong $chartSongToReplace */
+        $chartSongToReplace = $this->chartSongRepo->findOneBy([
+            'chart' => $chart->getId(),
+            'position' => $position,
+        ]);
+
+        // supprime le ChartSong à remplacer
+        if(!empty($chartSong) && !empty($chartSongToReplace) && ($chartSongToReplace == $chartSong))
+        {
+            $this->deleteChartSong($chartSongToReplace);
+        }
+
         // s'il n'existe pas, on le crée
-        if (empty($chartSong))
+        if(empty($chartSong))
         {
             $chartSong = new ChartSong();
-            $chartSong->setPosition($position);
             $chartSong->setChart($chart);
             $chartSong->setSong($song);
 
-            $this->em->persist($chartSong);
-            $this->em->flush();
-        }
-        else { // s'il existe, on verifies si sa position doit être mise à jour
-            if ($chartSong->getPosition() != $position)
-            {
-                $chartSong->setPosition($position);
-                $this->em->flush();
-            }
         }
 
+        $chartSong->setPosition($position);
+
+        $this->em->persist($chartSong);
+        $this->em->flush();
+
         return $chartSong;
+    }
+
+    /**
+     * Supprime un ChartSong
+     *
+     * @param ChartSong $chartSong
+     */
+    public function deleteChartSong(ChartSong $chartSong)
+    {
+        $this->em->remove($chartSong);
+        $this->em->flush();
     }
 
 }
