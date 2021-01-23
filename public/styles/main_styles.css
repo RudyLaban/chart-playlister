@@ -760,6 +760,8 @@ section
 .alert
 {
 	top: 140px;
+	text-align: center;
+	font-size: 18px;
 }
 .track
 {

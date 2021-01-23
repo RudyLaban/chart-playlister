@@ -41,8 +41,8 @@
 				<div class="row">
 					<div class="col">
 						<div class="home_content text-center">
-							<div class="home_title"><h1>{{ chart_name }}</h1></div>
-							<div class="home_subtitle text-center">{{ chart_site_name }}</div>
+							<div class="home_title"><h1>{{ chart.name }}</h1></div>
+							<div class="home_subtitle text-center">{{ chart.chartSite.name }}</div>
 						</div>
 					</div>
 				</div>
@@ -176,16 +176,16 @@
 						</tr>
 						</thead>
 						<tbody>
-						{% for key, song in data %}
-							{% if key is divisible by(2) %}
+						{% for song in chart.chartSongs %}
+							{% if song.position is divisible by(2) %}
 								<tr class="table-light">
 							{% else %}
 								<tr>
 
 							{% endif %}
-								<th scope="row">{{ key }}</th>
-								<td>{{ song.song_name }}</td>
-								<td>{{ song.artist_name }}</td>
+								<th scope="row">{{ song.position }}</th>
+								<td>{{ song.song.name }}</td>
+								<td>{{ song.song.artist.name }}</td>
 							</tr>
 						{% endfor %}
 						</tbody>

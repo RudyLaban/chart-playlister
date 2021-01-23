@@ -238,6 +238,8 @@ tr
 .alert
 {
 	top: 100px;
+	text-align: center;
+	font-size: 18px;
 }
 
 .prlx_parent
