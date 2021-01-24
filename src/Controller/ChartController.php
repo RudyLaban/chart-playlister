@@ -7,6 +7,7 @@ use App\Entity\ChartSite;
 use App\Entity\ChartSong;
 use App\Entity\Song;
 use App\Form\ChartAddImageType;
+use App\Form\ChartFormType;
 use App\Manager\ChartManager;
 use App\Repository\ChartRepository;
 use App\Repository\ChartSiteRepository;
@@ -86,7 +87,30 @@ class ChartController extends AbstractController
             return $this->redirectToRoute('home');
         }
 
-        // formulaire de soumissions d'image pour une chart
+        // formulaire de soumissions d'url vers une chart
+        $chartForm = $this->createForm(ChartFormType::class);
+        // récupération du formulaire
+        $chartForm->handleRequest($request);
+        // le formulaire est soumis et valide
+        if($chartForm->isSubmitted() && $chartForm->isValid())
+        {
+            $chartFormTraitement = $this->chartManager->chartFormTraitement($chartForm);
+            // le traitement du formulaire a été correctement effectué
+            if ($chartFormTraitement)
+            {
+                $this->addFlash('success', 'La playlist a bien été mise à jour !');
+                return $this->redirectToRoute('show_chart', [
+                    'chartSiteId' => $chartFormTraitement['chart_site'],
+                    'chartId' => $chartFormTraitement['chart'],
+                ]);
+            }
+            else // le traitement du formulaire n'a pas été correctement effectué
+            {
+                $this->addFlash('warning', 'La playlist n\'a pas pu être analyser. Merci de laisser un commentaire pour que je puisse analyser ce cas particulier.');
+            }
+        }
+
+            // formulaire de soumissions d'image pour une chart
         $form = $this->createForm(ChartAddImageType::class);
         // récupération du formulaire
         $form->handleRequest($request);
@@ -121,6 +145,7 @@ class ChartController extends AbstractController
         return $this->render('navigate/episode.html.twig', [
             'chart' => $chart,
             'chartAddImageForm' => $form->createView(),
+            'chartForm' => $chartForm->createView(),
         ]);
     }
 

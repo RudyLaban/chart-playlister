@@ -335,6 +335,11 @@ tr
 	background: #2e3038;
 	box-shadow: 0px 10px 55px rgba(0,0,0,0.55);
 }
+.update:hover
+{
+	color: #fff;
+	background: #ff3500;
+}
 .button_fill a
 {
 	display: block;
@@ -1328,6 +1333,17 @@ input#chart_add_image_imageFile
 	text-transform: uppercase;
 	cursor: pointer;
 	margin-top: 28px;
+}
+#chart_form_url
+{
+	display: none;
+}
+.update
+{
+	color: #ff3500;
+	border: 0.2em solid #ff3500;
+	background: #ffffff;
+	margin-left: 15px;
 }
 
 /*********************************

@@ -87,9 +87,8 @@
 			<div class="container">
 				<div class="row">
 					<div class="col-lg-3" id="chart-upload">
-						<!-- Formulaire de changement de pochette de la Chart -->
+						<!-- DEBUT - Formulaire de changement de pochette de la Chart -->
 						{{ form_start(chartAddImageForm) }}
-						{{ form_errors(chartAddImageForm) }}
 						<div class="episode_image" id="get-value" >
 							<img id="chart-img" src="{{ uploaded_asset(chart.imageFileName) }}" alt="">
 							<div class="overlay">
@@ -98,8 +97,16 @@
 							{{ form_widget(chartAddImageForm.imageFile) }}
 						</div>
 					</div>
-							{{ form_widget(chartAddImageForm.save, {'attr': {'class': 'comment_button button_fill'}}) }}
-						{{ form_end(chartAddImageForm) }}
+					{{ form_widget(chartAddImageForm.save, {'attr': {'class': 'comment_button button_fill'}}) }}
+					{{ form_end(chartAddImageForm) }}
+					<!-- FIN - Formulaire de changement de pochette de la Chart -->
+
+					<!-- DEBUT - Formulaire chargé de la mise à jours de la Chart et des éléments liés -->
+					{{ form_start(chartForm) }}
+						{{ form_widget(chartForm.url, {'value': chart.url}) }}
+						{{ form_widget(chartForm.save, {'attr': {'class': 'comment_button button_fill update'}, 'label': 'mettre à jour'}) }}
+					{{ form_end(chartForm) }}
+					<!-- FIN - Formulaire chargé de la mise à jours de la Chart et des éléments liés -->
 				</div>
 
 			</div>
