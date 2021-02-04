@@ -29,7 +29,7 @@
 {
 	.header_content
 	{
-		padding-left: 200px;
+		/*padding-left: 200px;*/
 	}
 }
 
@@ -130,7 +130,7 @@
 	}
 	.episode_col
 	{
-		margin-top: 53px;
+		margin-top: 25px;
 	}
 	.sidebar_col
 	{
@@ -192,10 +192,12 @@
 	{
 		height: auto;
 	}
+	/*
 	.episode_image
 	{
 		width: 150px;
 	}
+	*/
 	.episode_content
 	{
 		padding-left: 25px;
@@ -211,11 +213,25 @@
 11. 575px
 ************/
 
+/*
 @media (orientation: landscape) and (max-height: 400px)
 {
 	.menu
 	{
 		padding-top: 85px;
+	}
+}
+*/
+@media (orientation: landscape) and (max-height: 600px)
+{
+	.menu
+	{
+		padding: 0 70px 0 0;
+	}
+
+	.menu_submit
+	{
+		margin: 0 0 25px 0;
 	}
 }
 
@@ -263,10 +279,11 @@
 	.menu .social
 	{
 		display: block;
+		margin-bottom: 30px;
 	}
 	.home
 	{
-		height: 442px;
+		height: 367px;
 	}
 	.home_container
 	{
@@ -307,6 +324,14 @@
 	{
 		width: 121px;
 		font-size: 12px;
+	}
+	.episode_container
+	{
+		padding-top: 50px;
+	}
+	.parallax-mirror
+	{
+		top: -75px;
 	}
 }
 
