@@ -44,7 +44,7 @@ class NavigateController extends AbstractController
      *      - En cas de formulaire valide, création de la Chart et des Entités associées,
      *        puis redirection vers la page de la Chart.
      *
-     * @Route("/home" , name="home")
+     * @Route("/" , name="home")
      * @param Request $request
      * @return Response
      */
