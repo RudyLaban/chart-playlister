@@ -84,7 +84,7 @@ class NavigateController extends AbstractController
         $randomChart = $this->chartRepo->findRandomChart();
         if(!is_null($randomChart->getId()))
         {
-            array_push($renderParameters, $randomChart);
+            $renderParameters['randomChart'] = $randomChart;
         }
         // si le formulaire n'est pas soumis
         return $this->render('navigate/index.html.twig', $renderParameters);
