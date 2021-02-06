@@ -75,8 +75,11 @@ class NavigateController extends AbstractController
         // Récupération des 3 Chart à afficher en page d'accueil
         $chartLisForHome = $this->chartRepo->findThreeLastChart();
 
+        $randomChart = $this->chartRepo->findRandomChart();
+
         // si le formulaire n'est pas soumis
         return $this->render('navigate/index.html.twig', [
+            'randomChart' => $randomChart,
             'chartForm' => $form->createView(),
             'charts'    => $chartLisForHome,
         ]);

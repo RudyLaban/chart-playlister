@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<title>My Podcast</title>
+<title>Chart Playlister | Créateur de playlist</title>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="description" content="My Podcast template project">
+<meta name="description" content="Chart Playlister | Créateur de playlist">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" type="text/css" href="{{ asset('styles/bootstrap-4.1.2/bootstrap.min.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ asset('styles/main_styles.css') }}">
@@ -60,9 +60,7 @@
 							<h1>Découvrez chart playlister</h1>
 						</div>
 						<div class="home_text text-center">
-							<p>chart playlistener analyse des sites de classement musicaux et crée des playlists basées sur ces classements.</p>
-							<p>Le site analysé pour l'instant est Billboard, et les playlists sont créées sur Spotify.</p>
-							<p>Vous pouvez également utiliser l'outils playlistener afin de lancer la création de votre playlist basé sur une chart.</p>
+							<p>Création de playlists basées sur des sites de classement musicaux.</p>
 						</div>
 					</div>
 				</div>
@@ -149,9 +147,19 @@
 				<div class="col-lg-6">
 					<div class="weekly_content d-flex flex-column align-items-start justify-content-lg-center justify-content-start">
 						<div>
-							<div class="weekly_title"><h1>Playlist de la semaine</h1></div>
+							<div class="weekly_title"><h1>{% trans %}Découvrir une playlist{% endtrans %}</h1></div>
 							<div class="weekly_text">
-								<p>Cras congue et risus eget congue. Integer id justo non orci suscipit cursus a scelerisque libero. Fusce in tortor mauris. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Maecenas euismod sed magna.</p>
+								<p>{% trans %}Si des playlists existent, vous trouverez ici à chaque visite une playlist sélectionnée au hasard parmi les playlists du site.{% endtrans %}</p>
+							</div>
+							<div class="weekly_info">
+								{% if (randomChart is not null) %}
+									<a href="{{ path('show_chart', {chartSiteId: randomChart.chartSite.id, chartId: randomChart.id}) }}">
+										<h2>{{ randomChart.name }}</h2>
+									</a>
+									<a href="{{ randomChart.url }}" target="_blank" alt>
+										<h3>{{ randomChart.chartSite.name }}</h3>
+									</a>
+								{% endif %}
 							</div>
 							<div class="shops d-flex flex-row align-items-start justify-content-start flex-wrap">
 								<div class="button_border"><a href="#">Spotify</a></div>
@@ -165,10 +173,9 @@
 				<!-- Weekly Image -->
 				<div class="col-lg-6">
 					<div class="weekly_image">
-						<img src="images/show_3.png" alt="">
-						<div class="logo">
-							<a href="#" class="d-flex flex-row"><div><img src="images/play_2.png" alt=""></div></a>
-						</div>
+						<a href="{{ path('show_chart', {chartSiteId: randomChart.chartSite.id, chartId: randomChart.id}) }}">
+							<img src="{{ uploaded_asset(randomChart.imageFileName) }}" alt="">
+						</a>
 					</div>
 				</div>
 			</div>

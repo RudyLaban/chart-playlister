@@ -43,6 +43,18 @@ class ChartRepository extends ServiceEntityRepository
             ->getQuery();
     }
 
+    public function findRandomChart(): Chart
+    {
+        $randomChart = null;
+        $count = $this->findAllChartQuery()->getResult();
+        if($count !== null)
+        {
+            $randomChart = $count[array_rand($count)];
+        }
+
+        return $randomChart;
+    }
+
 
     /*
     public function findOneBySomeField($value): ?Chart
