@@ -141,8 +141,9 @@
 	<div class="weekly">
 		<div class="parallax_background parallax-window" data-parallax="scroll" data-image-src="images/weekly.jpg" data-speed="0.8"></div>
 		<div class="container">
+			{% if (randomChart is defined and randomChart is not null) %}
 			<div class="row row-eq-height">
-				
+
 				<!-- Weekly Content -->
 				<div class="col-lg-6">
 					<div class="weekly_content d-flex flex-column align-items-start justify-content-lg-center justify-content-start">
@@ -152,14 +153,12 @@
 								<p>{% trans %}Si des playlists existent, vous trouverez ici à chaque visite une playlist sélectionnée au hasard parmi les playlists du site.{% endtrans %}</p>
 							</div>
 							<div class="weekly_info">
-								{% if (randomChart is not null) %}
 									<a href="{{ path('show_chart', {chartSiteId: randomChart.chartSite.id, chartId: randomChart.id}) }}">
 										<h2>{{ randomChart.name }}</h2>
 									</a>
-									<a href="{{ randomChart.url }}" target="_blank" alt>
+									<a href="{{ randomChart.url }}" target="_blank">
 										<h3>{{ randomChart.chartSite.name }}</h3>
 									</a>
-								{% endif %}
 							</div>
 							<div class="shops d-flex flex-row align-items-start justify-content-start flex-wrap">
 								<div class="button_border"><a href="#">Spotify</a></div>
@@ -179,6 +178,7 @@
 					</div>
 				</div>
 			</div>
+			{% endif %}
 		</div>
 	</div>
 
