@@ -199,6 +199,12 @@
 
 @media only screen and (max-width: 575px)
 {
+	.alert
+	{
+		top: 62px;
+		z-index: 1;
+		width: 90%;
+	}
 	.logo
 	{
 		left: 15px;

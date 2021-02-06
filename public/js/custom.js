@@ -182,3 +182,7 @@ $(document).ready(function()
 	}
 
 });
+// fadeOut sur le flash message
+$(document).ready(function(){
+	$('.alert').fadeIn().delay(5000).fadeOut();
+});
