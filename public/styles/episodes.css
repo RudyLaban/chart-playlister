@@ -883,7 +883,8 @@ section
 }
 .page_nav_row
 {
-	margin-top: 50px;
+	margin-top: 10px;
+	margin-bottom: 50px;
 }
 .page_nav ul li
 {
@@ -896,6 +897,7 @@ section
 	-ms-transition: all 200ms ease;
 	-o-transition: all 200ms ease;
 	transition: all 200ms ease;
+	background-color: #ffffff;
 }
 .page_nav ul li:not(:last-of-type)
 {
@@ -948,6 +950,9 @@ i.fa-angle-left, i.fa-angle-double-left
 {
 	display: flex;
 	flex-wrap: wrap;
+	padding-top: 46px;
+	background-color: #ededed;
+	border-radius: 20px;
 }
 .col-lg-4
 {
@@ -964,15 +969,14 @@ i.fa-angle-left, i.fa-angle-double-left
 }
 .card-body
 {
-	background-color: #f6f6f6;
+	background-color: #ffffff;
 	padding-bottom: 1rem;
 	border-radius:0 0 0.5rem 0.5rem;
 }
 .episodes
 {
 	background: #FFFFFF;
-	padding-top: 80px;
-	padding-bottom: 99px;
+	padding: 60px 0 60px 0;
 }
 .season_links ul li:not(:last-of-type)
 {

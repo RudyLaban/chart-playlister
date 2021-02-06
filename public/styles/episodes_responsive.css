@@ -243,6 +243,10 @@
 	{
 		display: none;
 	}
+	.episodes_col
+	{
+		border-radius: 0;
+	}
 	.hamburger i
 	{
 		font-size: 24px;
