@@ -6,6 +6,9 @@ namespace App\Service;
 
 use App\Entity\Chart;
 use Gedmo\Sluggable\Util\Urlizer;
+use League\Flysystem\FileNotFoundException;
+use League\Flysystem\FilesystemInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Asset\Context\RequestStackContext;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -22,17 +25,22 @@ class UploaderHelper
     /**
      * @var string
      */
-    private $uploadsPath;
+    private $publicUploadFilesystem;
     /**
      * @var RequestStackContext
      */
     private $requestStackContext;
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
 
-    public function __construct(string $uploadsPath, RequestStackContext $requestStackContext)
+    public function __construct(FilesystemInterface $publicUploadFilesystem, RequestStackContext $requestStackContext, LoggerInterface $logger)
     {
 
-        $this->uploadsPath = $uploadsPath;
+        $this->publicUploadFilesystem = $publicUploadFilesystem;
         $this->requestStackContext = $requestStackContext;
+        $this->logger = $logger;
     }
 
     /**
@@ -40,17 +48,42 @@ class UploaderHelper
      * @param Chart $chart
      * @return string
      */
-    public function uploadChartImage(UploadedFile $uploadedFile, Chart $chart): string
+    public function uploadChartImage(UploadedFile $uploadedFile, Chart $chart, ?string $existingFilename): string
     {
-        $destination = $this->uploadsPath.'/'.self::CHART_IMAGE;
+        //$destination = $this->publicUploadFilesystem.'/'.self::CHART_IMAGE;
 
         $originalFilename = $chart->getName();
         $newFilename = Urlizer::urlize($originalFilename).'-'.uniqid().'.'.$uploadedFile->guessExtension();
 
-        $uploadedFile->move(
-            $destination,
-            $newFilename
+        $stream = fopen($uploadedFile->getPathname(), 'r');
+        $result = $this->publicUploadFilesystem->writeStream(
+            self::CHART_IMAGE.'/'.$newFilename,
+            $stream
         );
+
+        if ($result === false)
+        {
+            throw new \Exception(sprintf('La creation du fichier uploadé "%s" à échoué', $newFilename));
+        }
+
+        if (is_resource($stream))
+        {
+            fclose($stream);
+        }
+
+        if ($existingFilename)
+        {
+            try {
+                $result = $this->publicUploadFilesystem->delete($existingFilename);
+
+                if ($result === false)
+                {
+                    throw new \Exception(sprintf('La suppression de l\'ancien fichier uploadé "%s" à échoué', $existingFilename));
+                }
+            } catch (FileNotFoundException $e) {
+                $this->logger->alert(sprintf('L\'ancien fichier uploadé "%s" n\'a pas été trouvé lors de sa suppression.', $existingFilename));
+            }
+        }
 
         return $newFilename;
     }

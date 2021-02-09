@@ -125,7 +125,7 @@ class ChartController extends AbstractController
                 $uploadedFile = $form['imageFile']->getData();
                 if ($uploadedFile) {
                     // utilisation du service UploaderHelper
-                    $newFilename = $uploaderHelper->uploadChartImage($uploadedFile, $chart);
+                    $newFilename = $uploaderHelper->uploadChartImage($uploadedFile, $chart, $chart->getImageFileName());
                     // set de l'image
                     $chart->setImageFileName($newFilename);
                     $this->em->persist($chart);
