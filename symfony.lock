@@ -90,6 +90,9 @@
     "gedmo/doctrine-extensions": {
         "version": "v3.0.0"
     },
+    "jwilsson/spotify-web-api-php": {
+        "version": "4.2.1"
+    },
     "knplabs/knp-components": {
         "version": "v3.0.0"
     },

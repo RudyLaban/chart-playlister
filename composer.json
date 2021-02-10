@@ -14,6 +14,7 @@
         "doctrine/orm": "^2.8",
         "fabpot/goutte": "^4.0",
         "gedmo/doctrine-extensions": "^3.0",
+        "jwilsson/spotify-web-api-php": "^4.2",
         "knplabs/knp-paginator-bundle": "^5.4",
         "oneup/flysystem-bundle": "^3.7",
         "phpdocumentor/reflection-docblock": "^5.2",
