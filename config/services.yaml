@@ -32,6 +32,12 @@ services:
         resource: '../src/Controller/'
         tags: ['controller.service_arguments']
 
+    App\Controller\AuthController:
+        arguments:
+            $spotifyClientId: '%env(resolve:CLIENT_ID)%'
+            $spotifyClientSecret: '%env(resolve:CLIENT_SECRET)%'
+            $spotifyRedirectUri: '%env(resolve:REDIRECT_URI)%'
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 
