@@ -978,7 +978,10 @@ tr
 	left: 0;
 	width: 100%;
 }
-
+.fa-globe
+{
+	margin-left: 7px;
+}
 #chart-upload
 {
 	z-index: 1;
@@ -1042,7 +1045,10 @@ input#chart_add_image_imageFile
 	transform: translate(-50%, -50%);
 	text-align: center;
 }
-
+.uder
+{
+	margin-top: 30px;
+}
 .sidebar_list
 {
 	
