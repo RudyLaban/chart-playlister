@@ -2,6 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\Chart;
+use App\Repository\ChartRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,14 +19,19 @@ class AuthController extends AbstractController
 {
     private $spotifyParams;
     private $spotify;
+    /** @var ChartRepository  */
+    private $chartRepo;
+    /** @var EntityManagerInterface  */
+    private $em;
 
     /**
      * AuthController constructor. Variable venant du service App\Controller\AuthController
      * @param string $spotifyClientId
      * @param string $spotifyClientSecret
      * @param string $spotifyRedirectUri
+     * @param EntityManagerInterface $em
      */
-    public function __construct(string $spotifyClientId, string $spotifyClientSecret, string $spotifyRedirectUri)
+    public function __construct(string $spotifyClientId, string $spotifyClientSecret, string $spotifyRedirectUri, EntityManagerInterface $em)
     {
         $this->spotifyParams = [
             'client_id'     => $spotifyClientId,
@@ -39,6 +47,8 @@ class AuthController extends AbstractController
             $this->spotifyParams['client_secret'],
             $spotifyRedirectUri
         );
+        $this->em = $em;
+        $this->chartRepo = $em->getRepository(Chart::class);
     }
 
     /**
@@ -50,6 +60,8 @@ class AuthController extends AbstractController
      */
     public function login( SessionInterface $session ): Response
     {
+        // Récupération des 3 Chart à afficher en page d'accueil
+        $chartListForHome = $this->chartRepo->findThreeLastChart();
 
         $options = [
             'scope' => $this->spotifyParams['scope']
@@ -58,8 +70,8 @@ class AuthController extends AbstractController
         $spotifyAuthUrl = $this->spotify->getAuthorizeUrl($options);
 
         return $this->render('auth/login.html.twig', array(
-            'spotify_auth_url' => $spotifyAuthUrl
-
+            'spotify_auth_url' => $spotifyAuthUrl,
+            'chart_list_for_home' => $chartListForHome,
         ));
     }
 

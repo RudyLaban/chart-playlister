@@ -11,6 +11,9 @@
 <link href="{{ asset('plugins/colorbox/colorbox.css') }}" rel="stylesheet" type="text/css">
 <link rel="stylesheet" type="text/css" href="{{ asset('styles/episode.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ asset('styles/episode_responsive.css') }}">
+{% block favicon %}
+	{% embed "favicon.html.twig" %}{% endembed %}
+{% endblock %}
 <script src="{{ asset('https://kit.fontawesome.com/9a43e2d654.js') }}" crossorigin="anonymous"></script>
 </head>
 <body>

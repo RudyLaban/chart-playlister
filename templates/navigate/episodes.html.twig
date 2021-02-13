@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<title>Episodes</title>
+<title>Chart</title>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="description" content="My Podcast template project">
@@ -11,6 +11,9 @@
 <link href="{{ asset('plugins/colorbox/colorbox.css') }}" rel="stylesheet" type="text/css">
 <link rel="stylesheet" type="text/css" href="{{ asset('styles/episodes.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ asset('styles/episodes_responsive.css') }}">
+{% block favicon %}
+	{% embed "favicon.html.twig" %}{% endembed %}
+{% endblock %}
 <script src="https://kit.fontawesome.com/9a43e2d654.js" crossorigin="anonymous"></script>
 </head>
 <body>
@@ -28,7 +31,7 @@
 		<div class="parallax_background parallax-window" data-parallax="scroll" data-image-src="images/about.jpg" data-speed="0.8"></div>
 		<div class="home_container d-flex flex-column align-items-center justify-content-center">
 			<div class="home_content">
-				<div class="home_title"><h1>episodes</h1></div>
+				<div class="home_title"><h1>charts</h1></div>
 			</div>
 		</div>
 	</div>

@@ -2,10 +2,16 @@
 
 namespace App\Controller;
 
+use App\Entity\Artist;
 use App\Entity\Chart;
+use App\Entity\Playlist;
+use App\Entity\Song;
 use App\Form\ChartFormType;
 use App\Manager\ChartManager;
+use App\Repository\ArtistRepository;
 use App\Repository\ChartRepository;
+use App\Repository\PlaylistRepository;
+use App\Repository\SongRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,6 +28,15 @@ class NavigateController extends AbstractController
 
     /** @var ChartRepository */
     protected $chartRepo;
+    /** @var ArtistRepository */
+    protected $artistRepo;
+    /**
+     * @var PlaylistRepository
+     */
+    protected $playlistRepo;
+
+    /** @var SongRepository */
+    protected $songRepo;
 
     /**
      * ChartController constructor.
@@ -35,7 +50,11 @@ class NavigateController extends AbstractController
         $this->em = $em;
 
         $this->chartManager = $chartManager;
+
+        $this->artistRepo = $em->getRepository(Artist::class);
         $this->chartRepo = $em->getRepository(Chart::class);
+        $this->songRepo = $em->getRepository(Song::class);
+        $this->playlistRepo = $em->getRepository(Playlist::class);
     }
 
     /**
@@ -73,13 +92,13 @@ class NavigateController extends AbstractController
             }
         }
         // Récupération des 3 Chart à afficher en page d'accueil
-        $chartLisForHome = $this->chartRepo->findThreeLastChart();
+        $chartListForHome = $this->chartRepo->findThreeLastChart();
 
 
         $renderParameters = [
             'chartForm' => $form->createView(),
-            'charts'    => $chartLisForHome,
-            ];
+            'chart_list_for_home'    => $chartListForHome,
+        ];
 
         $randomChart = $this->chartRepo->findRandomChart();
         if(!is_null($randomChart->getId()))
@@ -95,7 +114,12 @@ class NavigateController extends AbstractController
      */
     public function blogAction(): Response
     {
-        return $this->render('navigate/blog.html.twig');
+        // Récupération des 3 Chart à afficher en page d'accueil
+        $chartListForHome = $this->chartRepo->findThreeLastChart();
+
+        return $this->render('navigate/blog.html.twig', [
+            'chart_list_for_home'    => $chartListForHome,
+        ]);
     }
 
     /**
@@ -103,7 +127,12 @@ class NavigateController extends AbstractController
      */
     public function contactAction(): Response
     {
-        return $this->render('navigate/contact.html.twig');
+        // Récupération des 3 Chart à afficher en page d'accueil
+        $chartListForHome = $this->chartRepo->findThreeLastChart();
+
+        return $this->render('navigate/contact.html.twig', [
+            'chart_list_for_home'    => $chartListForHome,
+        ]);
     }
 
     /**
@@ -111,6 +140,22 @@ class NavigateController extends AbstractController
      */
     public function aboutAction(): Response
     {
-        return $this->render('navigate/about.html.twig');
+        // compteur pour les Fun Facts
+        $artistCount = count($this->artistRepo->findAll());
+        $playlistCount = count($this->playlistRepo->findAll());
+        $songCount = count($this->songRepo->findAll());
+        $chartCount = count($this->chartRepo->findAll());
+
+        // Récupération des 3 Chart à afficher en page d'accueil
+        $chartListForHome = $this->chartRepo->findThreeLastChart();
+
+
+        return $this->render('navigate/about.html.twig', [
+            'artist_count' => $artistCount,
+            'playlist_count' => $playlistCount,
+            'song_count' => $songCount,
+            'chart_count' => $chartCount,
+            'chart_list_for_home' => $chartListForHome
+        ]);
     }
 }
