@@ -16,7 +16,37 @@
         <li>Your controller at <code><a href="{{ 'C:/wamp64/www/chart-playlister/src/Controller/PlaylistController.php'|file_link(0) }}">src/Controller/PlaylistController.php</a></code></li>
         <li>Your template at <code><a href="{{ 'C:/wamp64/www/chart-playlister/templates/playlist/index.html.twig'|file_link(0) }}">templates/playlist/index.html.twig</a></code></li>
     </ul>
-    {{ dump(count) }}
-    {{ dump(artists) }}
+
+    <h4 style="background: orange;">Nombre de morceau n'ayant pas été trouvé dans Spotify : {{ count }}</h4>
+
+    {% for key, item in artists %}
+        <table class="table table-bordered table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th colspan="3">{{ key }}</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for element in item %}
+                    <tr>
+                        <td>{{ element.name }}</td>
+                        <td>{{ element.id }}</td>
+                        <td><a href="{{ element.external_urls.spotify }}" target="_blank">Lien</a></td>
+                    </tr>
+                    {% if loop.last %}
+                        {% for artist in element.artists %}
+                            <tr class=>
+                                <td>{{ artist.name }}</td>
+                                <td>{{ artist.id }}</td>
+                                <td><a href="{{ artist.external_urls.spotify }}">Lien</a></td>
+                            </tr>
+                        {% endfor %}
+                    {% endif %}
+                {% endfor %}
+            </tbody>
+
+        </table>
+    {% endfor %}
 </div>
 {% endblock %}

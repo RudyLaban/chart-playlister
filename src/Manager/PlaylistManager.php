@@ -183,8 +183,8 @@ class PlaylistManager
                         if ($trackArtists->id == $matchedArtist->id)
                         {
                             $resultsDisplay = [
+                                'artist '. $count => $matchedArtist,
                                 'song '. $count => $track,
-                                'artist '. $count => $matchedArtist
                                 ];
                             break;
                         }
