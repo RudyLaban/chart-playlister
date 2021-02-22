@@ -90,6 +90,8 @@ class AuthController extends AbstractController
         $this->spotify->requestAccessToken($accessCode);
         $accessToken = $this->spotify->getAccessToken();
         $session->set('accessToken', $accessToken); // symfony session
+        $refreshToken = $this->spotify->getRefreshToken();
+        $session->set('refreshToken', $refreshToken); // symfony session
 
         return $this->redirectToRoute('profile');
     }
@@ -103,15 +105,28 @@ class AuthController extends AbstractController
     public function profile(Request $request, SessionInterface $session )
     {
         $accessToken = $session->get('accessToken');
-        if( ! $accessToken ) {
-            $session->getFlashBag()->add('error', 'Invalid authorization');
-            $this->redirectToRoute('login');
+        $refreshToken = $session->get('refreshToken');
+        $this->spotify->refreshAccessToken($refreshToken);
+        if ($accessToken) {
+            $this->spotify->setAccessToken($accessToken);
+            $this->spotify->setRefreshToken($refreshToken);
+        } else {
+            // Or request a new access token
+            $this->spotify->refreshAccessToken($refreshToken);
         }
+        $options = [
+            'auto_refresh' => true,
+        ];
 
-        $api = new SpotifyWebAPI\SpotifyWebAPI();
-        $api->setAccessToken($accessToken);
+        $api = new SpotifyWebAPI\SpotifyWebAPI($options, $this->spotify);
 
         $me = $api->me();
+
+        // Remember to grab the tokens afterwards, they might have been updated
+        $newAccessToken = $this->spotify->getAccessToken();
+        $session->set('accessToken', $newAccessToken);
+        $newRefreshToken = $this->spotify->getRefreshToken();
+        $session->set('refreshToken', $newRefreshToken);
 
         return $this->render('auth/profile.html.twig', array(
             'me' => $me
@@ -129,6 +144,6 @@ class AuthController extends AbstractController
         $session->clear();
         $session->getFlashBag()->add('success', 'Vous avez été déconnecté de Spotify avec succès');
 
-        return $this->redirectToRoute('home');
+        return $this->redirectToRoute('login');
     }
 }
