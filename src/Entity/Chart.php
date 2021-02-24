@@ -41,22 +41,16 @@ class Chart
      * @ORM\ManyToOne(targetEntity=ChartSite::class, inversedBy="charts")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $chartSite;
+    private $chartSite; 
 
     /**
      * @ORM\OneToMany(targetEntity=ChartSong::class, mappedBy="chart")
      */
     private $chartSongs;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Playlist::class, mappedBy="chart")
-     */
-    private $playlists;
-
     public function __construct()
     {
         $this->chartSongs = new ArrayCollection();
-        $this->playlists = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -136,36 +130,6 @@ class Chart
             // set the owning side to null (unless already changed)
             if ($chartSong->getChart() === $this) {
                 $chartSong->setChart(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Playlist[]
-     */
-    public function getPlaylists(): Collection
-    {
-        return $this->playlists;
-    }
-
-    public function addPlaylist(Playlist $playlist): self
-    {
-        if (!$this->playlists->contains($playlist)) {
-            $this->playlists[] = $playlist;
-            $playlist->setChart($this);
-        }
-
-        return $this;
-    }
-
-    public function removePlaylist(Playlist $playlist): self
-    {
-        if ($this->playlists->removeElement($playlist)) {
-            // set the owning side to null (unless already changed)
-            if ($playlist->getChart() === $this) {
-                $playlist->setChart(null);
             }
         }
 

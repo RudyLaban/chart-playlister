@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ChartSongRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -35,6 +37,16 @@ class ChartSong
      * @ORM\JoinColumn(nullable=false)
      */
     private $song;
+
+    /**
+     * @ORM\OneToMany(targetEntity=PlaylistChartSong::class, mappedBy="chartSong", orphanRemoval=true)
+     */
+    private $playlistChartSongs;
+
+    public function __construct()
+    {
+        $this->playlistChartSongs = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -73,6 +85,36 @@ class ChartSong
     public function setSong(?Song $song): self
     {
         $this->song = $song;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|PlaylistChartSong[]
+     */
+    public function getPlaylistChartSongs(): Collection
+    {
+        return $this->playlistChartSongs;
+    }
+
+    public function addPlaylistChartSong(PlaylistChartSong $playlistChartSong): self
+    {
+        if (!$this->playlistChartSongs->contains($playlistChartSong)) {
+            $this->playlistChartSongs[] = $playlistChartSong;
+            $playlistChartSong->setChartSong($this);
+        }
+
+        return $this;
+    }
+
+    public function removePlaylistChartSong(PlaylistChartSong $playlistChartSong): self
+    {
+        if ($this->playlistChartSongs->removeElement($playlistChartSong)) {
+            // set the owning side to null (unless already changed)
+            if ($playlistChartSong->getChartSong() === $this) {
+                $playlistChartSong->setChartSong(null);
+            }
+        }
 
         return $this;
     }

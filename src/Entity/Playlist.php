@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\PlaylistRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -30,15 +32,19 @@ class Playlist
     private $url;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Chart::class, inversedBy="playlists")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $chart;
-
-    /**
      * @ORM\ManyToOne(targetEntity=StreamingSite::class, inversedBy="playlists")
      */
     private $StreamingSite;
+
+    /**
+     * @ORM\OneToMany(targetEntity=PlaylistChartSong::class, mappedBy="playlist", orphanRemoval=true)
+     */
+    private $playlistChartSongs;
+
+    public function __construct()
+    {
+        $this->playlistChartSongs = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -69,18 +75,6 @@ class Playlist
         return $this;
     }
 
-    public function getChart(): ?Chart
-    {
-        return $this->chart;
-    }
-
-    public function setChart(?Chart $chart): self
-    {
-        $this->chart = $chart;
-
-        return $this;
-    }
-
     public function getStreamingSite(): ?StreamingSite
     {
         return $this->StreamingSite;
@@ -89,6 +83,36 @@ class Playlist
     public function setStreamingSite(?StreamingSite $StreamingSite): self
     {
         $this->StreamingSite = $StreamingSite;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|PlaylistChartSong[]
+     */
+    public function getPlaylistChartSongs(): Collection
+    {
+        return $this->playlistChartSongs;
+    }
+
+    public function addPlaylistChartSong(PlaylistChartSong $playlistChartSong): self
+    {
+        if (!$this->playlistChartSongs->contains($playlistChartSong)) {
+            $this->playlistChartSongs[] = $playlistChartSong;
+            $playlistChartSong->setPlaylist($this);
+        }
+
+        return $this;
+    }
+
+    public function removePlaylistChartSong(PlaylistChartSong $playlistChartSong): self
+    {
+        if ($this->playlistChartSongs->removeElement($playlistChartSong)) {
+            // set the owning side to null (unless already changed)
+            if ($playlistChartSong->getPlaylist() === $this) {
+                $playlistChartSong->setPlaylist(null);
+            }
+        }
 
         return $this;
     }
