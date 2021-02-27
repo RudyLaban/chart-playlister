@@ -38,7 +38,7 @@ class AuthController extends AbstractController
             'client_secret' => $spotifyClientSecret,
             'scope'         => [
                 'user-read-email','user-read-private','playlist-read-private', 'playlist-read-collaborative',
-                'playlist-modify-public', 'playlist-modify-private','user-follow-read','user-follow-modify'
+                'playlist-modify-public', 'playlist-modify-private','user-follow-read','user-follow-modify', 'ugc-image-upload'
             ]
         ];
 

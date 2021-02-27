@@ -3,7 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\Chart;
+use App\Entity\StreamingSite;
 use App\Manager\PlaylistManager;
+use App\Manager\SpotifyManager;
+use App\Repository\StreamingSiteRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -12,11 +16,14 @@ use SpotifyWebAPI;
 
 class PlaylistController extends AbstractController
 {
+    /** @var SpotifyManager */
+    private $spotifyManager;
     /** @var PlaylistManager */
     private $playlistManager;
 
-    public function __construct(PlaylistManager $playlistManager)
+    public function __construct(SpotifyManager $spotifyManager, PlaylistManager $playlistManager)
     {
+        $this->spotifyManager = $spotifyManager;
         $this->playlistManager = $playlistManager;
     }
 //    /**
@@ -32,12 +39,12 @@ class PlaylistController extends AbstractController
     /**
      * Création de la playlist d'une Chart (Spotify)
      *
-     * @Route("/create_playlist/{chart}", name="create")
+     * @Route("/create_playlist_s/{chart}", name="create_playlist_s")
      * @param SessionInterface $session
      * @param Chart $chart
      * @return Response
      */
-    public function create(SessionInterface $session, Chart $chart): Response
+    public function createSpotifyPlaylist(SessionInterface $session, Chart $chart): Response
     {
         if (!$chart)
         {
@@ -53,25 +60,45 @@ class PlaylistController extends AbstractController
             return $this->redirectToRoute('login');
         }
 
+        $playlist = null;
+
         $api = new SpotifyWebAPI\SpotifyWebAPI();
         $api->setAccessToken($accessToken);
 
-        $resultsDisplay = $this->playlistManager->create($api, $chart);
-
-        $count = 0;
-
-        foreach ($resultsDisplay as $element)
+        $spotifyTracks = $this->spotifyManager->getSpotifyTracks($api, $chart);
+        // todo-rla: si $spotifyTracks ne renvoit pas d'élement, stopper la création, renvoyer sur la page de depart
+        if (!is_null($spotifyTracks) && !empty($spotifyTracks))
         {
-            if(count($element) < 2)
-            {
-                $count++;
-            }
+            $spotify = $this->spotifyManager->create();
+            $playlist = $this->playlistManager->spotifyPlaylistBuilder($spotify, $spotifyTracks, $chart, $api);
+
         }
 
-        return $this->render('playlist/index.html.twig', [
-            'controller_name' => 'PlaylistController',
-            'artists' => $resultsDisplay,
-            'count' => $count,
-        ]);
+        if (!is_null($playlist)){
+            return $this->redirectToRoute('show_chart',
+                [
+                    'chartSiteId' => $chart->getChartSite()->getId(),
+                    'chartId' => $chart->getId(),
+                ]);
+        }
+
+        return $this->redirectToRoute('home');
+
+
+//        $count = 0;
+//
+//        foreach ($spotifyTracks as $element)
+//        {
+//            if(count($element) < 2)
+//            {
+//                $count++;
+//            }
+//        }
+//
+//        return $this->render('playlist/index.html.twig', [
+//            'controller_name' => 'PlaylistController',
+//            'artists' => $spotifyTracks,
+//            'count' => $count,
+//        ]);
     }
 }
