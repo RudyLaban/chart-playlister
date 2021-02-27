@@ -41,6 +41,11 @@ class Playlist
      */
     private $playlistChartSongs;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $externalId;
+
     public function __construct()
     {
         $this->playlistChartSongs = new ArrayCollection();
@@ -113,6 +118,18 @@ class Playlist
                 $playlistChartSong->setPlaylist(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getExternalId(): ?string
+    {
+        return $this->externalId;
+    }
+
+    public function setExternalId(string $externalId): self
+    {
+        $this->externalId = $externalId;
 
         return $this;
     }
