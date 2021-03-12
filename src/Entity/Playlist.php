@@ -46,6 +46,11 @@ class Playlist
      */
     private $externalId;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Chart::class, inversedBy="playlists")
+     */
+    private $chart;
+
     public function __construct()
     {
         $this->playlistChartSongs = new ArrayCollection();
@@ -130,6 +135,18 @@ class Playlist
     public function setExternalId(string $externalId): self
     {
         $this->externalId = $externalId;
+
+        return $this;
+    }
+
+    public function getChart(): ?Chart
+    {
+        return $this->chart;
+    }
+
+    public function setChart(?Chart $chart): self
+    {
+        $this->chart = $chart;
 
         return $this;
     }
