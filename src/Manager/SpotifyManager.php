@@ -10,9 +10,7 @@ use App\Entity\ChartSong;
 use App\Entity\Playlist;
 use App\Entity\Song;
 use App\Entity\StreamingSite;
-use App\Service\UploaderHelper;
 use App\Twig\AppExtension;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use SpotifyWebAPI\SpotifyWebAPI;
@@ -222,7 +220,7 @@ class SpotifyManager
 
     /**
      * Création de la playlist dans spotify
-     *
+     * @TODO Gérer le cas de la playlist existante dans spotify mais pas dans Chart Playlister
      * @param SpotifyWebAPI $api
      * @param Playlist $playlist
      * @param Chart $chart

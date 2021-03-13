@@ -7,8 +7,6 @@ namespace App\Manager;
 use App\Entity\Chart;
 use App\Entity\Playlist;
 use App\Entity\StreamingSite;
-use App\Repository\PlaylistRepository;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use SpotifyWebAPI\SpotifyWebAPI;
 
@@ -30,7 +28,7 @@ class PlaylistManager
     }
 
     /**
-     *
+     * Gestion de la création de la Playlist dans Chart Playlister et dans Spotify
      *
      * @param StreamingSite $spotify
      * @param $spotifyTracks
@@ -44,12 +42,13 @@ class PlaylistManager
         $playlist = $this->createPlaylist($spotify, $chart);
         // création de la playlist dans spotify
         $spotifyPlaylist = $this->spotifyManager->createSpotifyPlaylist($api, $playlist, $chart);
+        // on complete la Playlist Chart Playlister avec les info de la playlist Spotify
         $playlist->setExternalId($spotifyPlaylist->id);
         $playlist->setUrl($spotifyPlaylist->external_urls->spotify);
         $this->em->flush();
 
-        // création des sons de la playlist
-        $this->pscManager->createPlaylistChartSongs($api, $spotifyTracks, $playlist, $spotifyPlaylist);
+        // création des PlaylistChartSong de la playlist
+        $this->pscManager->createPlaylistChartSongs($api, $spotifyTracks, $playlist);
 
         return $playlist;
     }
@@ -71,6 +70,7 @@ class PlaylistManager
             $playlist->setName($playlistName);
             $playlist->setStreamingSite($spotify);
             $playlist->setExternalId('');
+            $playlist->setChart($chart);
 
             $this->em->persist($playlist);
             $this->em->flush();

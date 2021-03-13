@@ -4,24 +4,30 @@
 namespace App\Manager;
 
 
+use App\Entity\Chart;
 use App\Entity\ChartSong;
 use App\Entity\Playlist;
 use App\Entity\PlaylistChartSong;
+use App\Repository\PlaylistRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use SpotifyWebAPI\SpotifyWebAPI;
 
 class PlaylistChartSongManager
 {
-
     /** @var EntityManagerInterface */
     private $em;
 
-    public function __construct(EntityManagerInterface $em)
+    /** @var PlaylistRepository */
+    private $playlistRepo;
+
+    public function __construct(EntityManagerInterface $em, PlaylistRepository $playlistRepo)
     {
         $this->em = $em;
+
+        $this->playlistRepo = $playlistRepo;
     }
 
-    public function createPlaylistChartSongs(SpotifyWebAPI $api, $spotifyTracks, Playlist $playlist, $spotifyPlaylist)
+    public function createPlaylistChartSongs(SpotifyWebAPI $api, $spotifyTracks, Playlist $playlist)
     {
         $tracksIds = [];
         foreach ($spotifyTracks as $spotifyTrack)
@@ -86,5 +92,37 @@ class PlaylistChartSongManager
                 }
             }
         }
+    }
+
+    /**
+     * Supprime les PlaylistChartSong liés au Playlist d'une Chart
+     *
+     * @param Chart $chart
+     */
+    public function deletePlaylistChartSongsOfPlaylist(Chart $chart)
+    {
+        // récupère les Playlists liées à la Chart
+        $playlists = $this->playlistRepo->findBy(['chart' => $chart->getId()]);
+        // pour chaque Playlist
+        foreach ($playlists as $playlist)
+        {
+            $playlistChartSongList = $playlist->getPlaylistChartSongs();
+            // supprime chaque PlaylistChartSongs
+            foreach ($playlistChartSongList as $pcs)
+            {
+                $this->deletePlaylistChartSong($pcs);
+            }
+        }
+    }
+
+    /**
+     * Supprime un PlaylistChartSong de la base
+     *
+     * @param PlaylistChartSong $pcs
+     */
+    public function deletePlaylistChartSong(PlaylistChartSong $pcs)
+    {
+        $this->em->remove($pcs);
+        $this->em->flush();
     }
 }

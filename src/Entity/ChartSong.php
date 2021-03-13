@@ -39,7 +39,7 @@ class ChartSong
     private $song;
 
     /**
-     * @ORM\OneToMany(targetEntity=PlaylistChartSong::class, mappedBy="chartSong", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=PlaylistChartSong::class, mappedBy="chartSong", orphanRemoval=true, cascade={"persist"})
      */
     private $playlistChartSongs;
 

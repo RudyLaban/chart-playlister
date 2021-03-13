@@ -16,22 +16,19 @@ class ChartManager
 {
     /** @var ContainerInterface */
     protected $container;
-
     /** @var EntityManagerInterface */
     protected $em;
 
     /** @var ChartSiteManager */
     protected $chartSiteManager;
-
     /** @var ChartSongManager */
     protected $chartSongManager;
-
     /** @var ArtistManager */
     protected $artistManager;
-
     /** @var SongManager */
     protected $songManager;
-
+    /** @var PlaylistChartSongManager */
+    private $playlistChartSongManager;
     /** @var ChartRepository */
     protected $chartRepo;
 
@@ -47,6 +44,7 @@ class ChartManager
      * @param ChartSongManager $chartSongManager
      * @param ArtistManager $artistManager
      * @param SongManager $songManager
+     * @param PlaylistChartSongManager $playlistChartSongManager
      */
     public function __construct(
         ContainerInterface $container,
@@ -55,7 +53,8 @@ class ChartManager
         ChartSiteManager $chartSiteManager,
         ChartSongManager $chartSongManager,
         ArtistManager $artistManager,
-        SongManager $songManager)
+        SongManager $songManager,
+        PlaylistChartSongManager $playlistChartSongManager)
     {
         $this->container = $container;
         $this->em = $em;
@@ -64,6 +63,7 @@ class ChartManager
         $this->chartSongManager = $chartSongManager;
         $this->artistManager = $artistManager;
         $this->songManager = $songManager;
+        $this->playlistChartSongManager = $playlistChartSongManager;
 
         $this->chartRepo = $this->em->getRepository(Chart::class);
         $this->logger = $logger;
@@ -101,6 +101,8 @@ class ChartManager
         $this->artistManager->createArtistsOfChart($artistsElementsList);
         // on crée en base les Song de la Chart si ils n'existent pas
         $this->songManager->createSongsOfChart($chartSongsElements);
+        // on supprime les PlaylistChartSong liés aux Playlists de la Chart
+        $this->playlistChartSongManager->deletePlaylistChartSongsOfPlaylist($chart);
         // on crée en base les ChartSong si ils n'existent pas
         // si ils existent, ont met à jours le champs position
         $this->chartSongManager->createChartSongs($chartSongsElements, $chart);
