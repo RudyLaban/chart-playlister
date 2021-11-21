@@ -1,24 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<title>Contact</title>
-<meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="description" content="My Podcast template project">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" type="text/css" href="styles/bootstrap-4.1.2/bootstrap.min.css">
-<link href="plugins/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-<link href="plugins/colorbox/colorbox.css" rel="stylesheet" type="text/css">
-<link rel="stylesheet" type="text/css" href="styles/contact.css">
-<link rel="stylesheet" type="text/css" href="styles/contact_responsive.css">
-{% block favicon %}
-	{% embed "favicon.html.twig" %}{% endembed %}
-{% endblock %}
-<script src="https://kit.fontawesome.com/9a43e2d654.js" crossorigin="anonymous"></script>
-</head>
-<body>
+{% extends 'base.html.twig' %}
 
-<div class="super_container">
+{% block head %}
+	<link rel="stylesheet" type="text/css" href="styles/contact.css">
+	<link rel="stylesheet" type="text/css" href="styles/contact_responsive.css">
+{% endblock %}
+
+{% block body %}
+	<div class="super_container">
 
 	<!-- Header -->
 	{% block header %}
@@ -42,16 +30,16 @@
 		<div class="container">
 			<div class="row">
 				<div class="col">
-					
+
 					<!-- Intro -->
 					<div class="intro">
 						<div class="section_title text-center"><h1>Une Question ? Une remarque ?</h1></div>
 						<div class="intro_text text-center">
-							<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed a bibendum sem. Fusce dignissim et diam quis pretium. 
+							<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed a bibendum sem. Fusce dignissim et diam quis pretium.
 Etiam efficitur semper accumsan. Sed et dui aliquet, ultrices tellus non, sagittis magna. Nullam justo quam, vestibulum non magna et, tempus tincidunt est. Ut laoreet magna ac luctus lacinia. Aliquam eget neque turpis. Phasellus nibh ex, tristique a magna ac, convallis tincidunt diam. Nulla facilisi. Phasellus porta sapien sit amet tortor rhoncus mattis.</p>
 						</div>
 					</div>
-
+					{# ToDo: Mettre en place le système de contact avec MailJet #}
 					<!-- Contact Form -->
 					<div class="contact_form_container">
 						<div class="contact_form_title text-center">Envoyez-nous un message</div>
@@ -71,7 +59,7 @@ Etiam efficitur semper accumsan. Sed et dui aliquet, ultrices tellus non, sagitt
 									<button class="contact_button button_fill ml-auto mr-auto">Envoyer</button>
 								</form>
 							</div>
-						</div>	
+						</div>
 					</div>
 
 					<!-- Google Map -->
@@ -120,20 +108,6 @@ Etiam efficitur semper accumsan. Sed et dui aliquet, ultrices tellus non, sagitt
 		{% embed "footer.html.twig" %}{% endembed %}
 	{% endblock %}
 </div>
+{% endblock %}
 
-<script src="js/jquery-3.3.1.min.js"></script>
-<script src="styles/bootstrap-4.1.2/popper.js"></script>
-<script src="styles/bootstrap-4.1.2/bootstrap.min.js"></script>
-<script src="plugins/greensock/TweenMax.min.js"></script>
-<script src="plugins/greensock/TimelineMax.min.js"></script>
-<script src="plugins/scrollmagic/ScrollMagic.min.js"></script>
-<script src="plugins/greensock/animation.gsap.min.js"></script>
-<script src="plugins/greensock/ScrollToPlugin.min.js"></script>
-<script src="plugins/colorbox/jquery.colorbox-min.js"></script>
-<script src="plugins/easing/easing.js"></script>
-<script src="plugins/progressbar/progressbar.min.js"></script>
-<script src="plugins/parallax-js-master/parallax.min.js"></script>
-<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&key=AIzaSyCIwF204lFZg1y4kPSIhKaHEXMLYxxuMhA"></script>
-<script src="js/contact.js"></script>
-</body>
-</html>
+

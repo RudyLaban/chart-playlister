@@ -61,7 +61,7 @@ class AuthController extends AbstractController
     public function login( SessionInterface $session ): Response
     {
         // Récupération des 3 Chart à afficher en page d'accueil
-        $chartListForHome = $this->chartRepo->findThreeLastChart();
+        $threeLastChart = $this->chartRepo->findThreeLastChart();
 
         $options = [
             'scope' => $this->spotifyParams['scope']
@@ -71,7 +71,7 @@ class AuthController extends AbstractController
 
         return $this->render('auth/login.html.twig', array(
             'spotify_auth_url' => $spotifyAuthUrl,
-            'chart_list_for_home' => $chartListForHome,
+            'three_last_chart' => $threeLastChart,
         ));
     }
 

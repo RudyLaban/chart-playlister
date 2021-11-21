@@ -1,32 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<title>Blog</title>
-<meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="description" content="My Podcast template project">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" type="text/css" href="styles/bootstrap-4.1.2/bootstrap.min.css">
-<link href="plugins/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-<link href="plugins/colorbox/colorbox.css" rel="stylesheet" type="text/css">
-<link rel="stylesheet" type="text/css" href="styles/blog.css">
-<link rel="stylesheet" type="text/css" href="styles/blog_responsive.css">
-{% block favicon %}
-	{% embed "favicon.html.twig" %}{% endembed %}
+{% extends 'base.html.twig' %}
+
+{% block head %}
+	<link rel="stylesheet" type="text/css" href="styles/blog.css">
+	<link rel="stylesheet" type="text/css" href="styles/blog_responsive.css">
 {% endblock %}
-<script src="https://kit.fontawesome.com/9a43e2d654.js" crossorigin="anonymous"></script>
-</head>
-<body>
 
-<div class="super_container">
-
-	<!-- Header -->
-	{% block header %}
-		{% embed "header.html.twig" %}{% endembed %}
-	{% endblock %}
-
-	<!-- Home -->
-
+{% block body %}
 	<div class="home">
 		<div class="parallax_background parallax-window" data-parallax="scroll" data-image-src="images/blog.jpg" data-speed="0.8"></div>
 		<div class="home_container d-flex flex-column align-items-center justify-content-center">
@@ -37,15 +16,14 @@
 	</div>
 
 	<!-- Blog -->
-
 	<div class="blog">
 		<div class="container">
 			<div class="row">
-				
+
 				<!-- Sidebar -->
 				<div class="col-lg-3 order-lg-1 order-2 sidebar_col">
 					<div class="sidebar">
-						
+
 						<!-- Search -->
 						<div class="sidebar_search">
 							<div class="sidebar_title">Rechercher</div>
@@ -111,7 +89,7 @@
 				<!-- Blog -->
 				<div class="col-lg-9 blog_col order-lg-2 order-1">
 					<div class="blog_posts">
-						
+
 						<!-- Blog Post -->
 						<div class="blog_post d-flex flex-md-row flex-column align-items-start justify-content-start">
 							<div class="blog_post_image">
@@ -180,25 +158,9 @@
 			</div>
 		</div>
 	</div>
+{% endblock %}
 
-	<!-- Footer -->
-	{% block footer %}
-		{% embed "footer.html.twig" %}{% endembed %}
-	{% endblock %}
-</div>
+{% block script %}
+	<script src="js/blog.js"></script>
+{% endblock %}
 
-<script src="js/jquery-3.3.1.min.js"></script>
-<script src="styles/bootstrap-4.1.2/popper.js"></script>
-<script src="styles/bootstrap-4.1.2/bootstrap.min.js"></script>
-<script src="plugins/greensock/TweenMax.min.js"></script>
-<script src="plugins/greensock/TimelineMax.min.js"></script>
-<script src="plugins/scrollmagic/ScrollMagic.min.js"></script>
-<script src="plugins/greensock/animation.gsap.min.js"></script>
-<script src="plugins/greensock/ScrollToPlugin.min.js"></script>
-<script src="plugins/colorbox/jquery.colorbox-min.js"></script>
-<script src="plugins/easing/easing.js"></script>
-<script src="plugins/progressbar/progressbar.min.js"></script>
-<script src="plugins/parallax-js-master/parallax.min.js"></script>
-<script src="js/blog.js"></script>
-</body>
-</html>

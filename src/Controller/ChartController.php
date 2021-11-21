@@ -81,7 +81,7 @@ class ChartController extends AbstractController
         $chartSite = $this->chartSiteRepo->find($chartSiteId);
         $chart = $this->chartRepo->find($chartId);
         // Récupération des 3 Chart à afficher en page d'accueil
-        $chartListForHome = $this->chartRepo->findThreeLastChart();
+        $threeLastChart = $this->chartRepo->findThreeLastChart();
 
 
         if (!$chartSite || !$chart)
@@ -105,7 +105,7 @@ class ChartController extends AbstractController
                 return $this->redirectToRoute('show_chart', [
                     'chartSiteId' => $chartFormTraitement['chart_site'],
                     'chartId' => $chartFormTraitement['chart'],
-                    'chart_list_for_home' => $chartListForHome,
+                    'three_last_chart' => $threeLastChart,
                 ]);
             }
             else // le traitement du formulaire n'a pas été correctement effectué
@@ -150,7 +150,7 @@ class ChartController extends AbstractController
             'chart' => $chart,
             'chartAddImageForm' => $form->createView(),
             'chartForm' => $chartForm->createView(),
-            'chart_list_for_home' => $chartListForHome,
+            'three_last_chart' => $threeLastChart,
         ]);
     }
 
@@ -167,7 +167,7 @@ class ChartController extends AbstractController
         // formatage de la requête en utilisant le paginator
         $chartList = $paginator->paginate($this->chartRepo->findAllChartQuery(), $request->query->getInt('page',1),6);
         // Récupération des 3 Chart à afficher en page d'accueil
-        $chartListForHome = $this->chartRepo->findThreeLastChart();
+        $threeLastChart = $this->chartRepo->findThreeLastChart();
 
 
         if (!$chartList)
@@ -178,7 +178,7 @@ class ChartController extends AbstractController
 
         return $this->render('navigate/episodes.html.twig', [
             'charts' => $chartList,
-            'chart_list_for_home' => $chartListForHome,
+            'three_last_chart' => $threeLastChart,
         ]);
 
     }

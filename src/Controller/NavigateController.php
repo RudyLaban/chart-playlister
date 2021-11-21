@@ -92,12 +92,12 @@ class NavigateController extends AbstractController
             }
         }
         // Récupération des 3 Chart à afficher en page d'accueil
-        $chartListForHome = $this->chartRepo->findThreeLastChart();
+        $threeLastChart = $this->chartRepo->findThreeLastChart();
 
 
         $renderParameters = [
             'chartForm' => $form->createView(),
-            'chart_list_for_home'    => $chartListForHome,
+            'three_last_chart'    => $threeLastChart,
         ];
 
         $randomChart = $this->chartRepo->findRandomChart();
@@ -115,10 +115,10 @@ class NavigateController extends AbstractController
     public function blogAction(): Response
     {
         // Récupération des 3 Chart à afficher en page d'accueil
-        $chartListForHome = $this->chartRepo->findThreeLastChart();
+        $threeLastChart = $this->chartRepo->findThreeLastChart();
 
         return $this->render('navigate/blog.html.twig', [
-            'chart_list_for_home'    => $chartListForHome,
+            'three_last_chart'    => $threeLastChart,
         ]);
     }
 
@@ -128,10 +128,10 @@ class NavigateController extends AbstractController
     public function contactAction(): Response
     {
         // Récupération des 3 Chart à afficher en page d'accueil
-        $chartListForHome = $this->chartRepo->findThreeLastChart();
+        $threeLastChart = $this->chartRepo->findThreeLastChart();
 
         return $this->render('navigate/contact.html.twig', [
-            'chart_list_for_home'    => $chartListForHome,
+            'three_last_chart'    => $threeLastChart,
         ]);
     }
 
@@ -147,7 +147,7 @@ class NavigateController extends AbstractController
         $chartCount = count($this->chartRepo->findAll());
 
         // Récupération des 3 Chart à afficher en page d'accueil
-        $chartListForHome = $this->chartRepo->findThreeLastChart();
+        $threeLastChart = $this->chartRepo->findThreeLastChart();
 
 
         return $this->render('navigate/about.html.twig', [
@@ -155,7 +155,7 @@ class NavigateController extends AbstractController
             'playlist_count' => $playlistCount,
             'song_count' => $songCount,
             'chart_count' => $chartCount,
-            'chart_list_for_home' => $chartListForHome
+            'three_last_chart' => $threeLastChart
         ]);
     }
 }
