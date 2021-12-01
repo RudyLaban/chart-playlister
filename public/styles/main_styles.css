@@ -817,7 +817,7 @@ section
 {
 	border-radius: 3px;
 	overflow: hidden;
-	background: #f6f6f6;
+	/*background: #f6f6f6; pour la modal carousel*/
 }
 .show_image a
 {

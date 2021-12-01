@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <!-- Home -->
+    <div class="home">
+        {% block flashMessage %}
+            {% for label, messages in app.flashes %}
+                {% for message in messages %}
+                    <div class="container alert alert-{{ label }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endfor %}
+        {% endblock %}
+
+        <div class="background_image parallax_background parallax-window" data-parallax="scroll" data-image-src="{{ asset('images/koolshooters.jpg') }}" data-speed="0.6"></div>
+        <div class="home_container">
+            <div class="container">
+                <div class="row">
+                    <div class="col">
+                        <div class="home_title text-center">
+                            <h1>Scanner une Chart</h1>
+                        </div>
+                        <div class="home_text text-center">
+                            <p>
+                                Collez ici l'url de la chart que vous souhaitez scanner.
+                                <a type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                    Comment ça marche ?
+                                </a>
+                                {# Carrousel Comment ça marche ? #}
+                                {% block modal_carousel %}
+                                    {% embed "modal_carousel.html.twig" %}{% endembed %}
+                                {% endblock %}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row home_row">
+                    <div class="col-lg-10 offset-lg-1">
+                        <div class="home_form_container">
+                            {{ form_start
+                                (chartForm,
+                                {'attr':
+                                    {'class': 'home_form d-flex flex-md-row flex-column align-items-md-start align-items-center justify-content-md-between justify-content-start'}
+                                })
+                            }}
+                            {{ form_widget(chartForm.url) }}
+                            {{ form_widget(chartForm.save) }}
+                            {{ form_end(chartForm) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
