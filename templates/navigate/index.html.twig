@@ -1,5 +1,10 @@
 {% extends 'base.html.twig' %}
 
+{% block head %}
+	<link rel="stylesheet" type="text/css" href="{{ asset('styles/main_styles.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ asset('styles/responsive.css') }}">
+{% endblock %}
+
 {% block body %}
 <!-- Home -->
 
@@ -29,146 +34,44 @@
 			</div>
 			<div class="row home_row">
 				<div class="col-lg-10 offset-lg-1">
-					<div class="home_form_container">
-						{{ form_start
-							(chartForm,
-							{'attr':
-								{'class': 'home_form d-flex flex-md-row flex-column align-items-md-start align-items-center justify-content-md-between justify-content-start'}
-							})
-						}}
-							{{ form_widget(chartForm.url) }}
-							{{ form_widget(chartForm.save) }}
-						{{ form_end(chartForm) }}
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-
-<!-- How it works -->
-<div class="shows_2">
-	<div class="container">
-		<div class="row">
-			<div class="col">
-				<div class="shows_2_title">Comment ça marche ?</div>
-				<p class="shows_2 text-left">Sur <a href="https://www.billboard.com/charts" target="_blank">Bilboard</a>, récupérez l'url de votre chart préférée,
-					collez la dans la barre sur chart playlister, puis cliquez sur scanner. Vous pourrez ensuite la générer sur Spotify.
-				</p>
-			</div>
-		</div>
-		<div class="row shows_2_row">
-
-			<!-- Show -->
-			<div class="col-xl-3 col-md-6">
-				<div class="show">
-					<div class="show_image">
-						<a href="episode.html.twig">
-							<img src="images/show_4.png" alt="https://unsplash.com/@h4rd3n">
-							<div class="show_play_icon"><img src="images/play.svg" alt="https://www.flaticon.com/authors/cole-bemis"></div>
-							<div class="show_title_2">Cras malesuada ipsum sapien.</div>
+					<div class="home_form_container text-center">
+						<a href="{{ path('chart_scanne') }}" class="m-1">
+								<button type="submit" id="chart_form_save" name="chart_form[save]" class="home_form_button button_fill">Scanner une chart</button>
 						</a>
-						<div class="show_tags">
-							<div class="tags">
-								<ul class="d-flex flex-row align-items-start justify-content-start">
-									<li><a href="#">travel</a></li>
-								</ul>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-
-			<!-- Show -->
-			<div class="col-xl-3 col-md-6">
-				<div class="show">
-					<div class="show_image">
-						<a href="episode.html.twig">
-							<img src="images/show_5.png" alt="https://unsplash.com/@gohobo">
-							<div class="show_play_icon"><img src="images/play.svg" alt="https://www.flaticon.com/authors/cole-bemis"></div>
-							<div class="show_title_2">Cras malesuada ipsum sapien.</div>
+						<a href="{{ path('charts') }}" class="m-1">
+								<button type="submit" id="chart_form_save" name="chart_form[save]" class="home_form_button show button_fill">Voir les playlists</button>
+							</span>
 						</a>
-						<div class="show_tags">
-							<div class="tags">
-								<ul class="d-flex flex-row align-items-start justify-content-start">
-									<li><a href="#">lifestyle</a></li>
-								</ul>
-							</div>
-						</div>
 					</div>
 				</div>
-			</div>
-
-			<!-- Show -->
-			<div class="col-xl-3 col-md-6">
-				<div class="show">
-					<div class="show_image">
-						<a href="episode.html.twig">
-							<img src="images/show_7.png" alt="https://unsplash.com/@zacharykeimig">
-							<div class="show_play_icon"><img src="images/play.svg" alt="https://www.flaticon.com/authors/cole-bemis"></div>
-							<div class="show_title_2">Cras malesuada ipsum sapien.</div>
-						</a>
-						<div class="show_tags">
-							<div class="tags">
-								<ul class="d-flex flex-row align-items-start justify-content-start">
-									<li><a href="#">music</a></li>
-								</ul>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-
-			<!-- Show -->
-			<div class="col-xl-3 col-md-6">
-				<div class="show">
-					<div class="show_image">
-						<a href="episode.html.twig">
-							<img src="images/show_8.png" alt="https://unsplash.com/@bkview">
-							<div class="show_play_icon"><img src="images/play.svg" alt="https://www.flaticon.com/authors/cole-bemis"></div>
-							<div class="show_title_2">Cras malesuada ipsum sapien.</div>
-						</a>
-						<div class="show_tags">
-							<div class="tags">
-								<ul class="d-flex flex-row align-items-start justify-content-start">
-									<li><a href="#">travel</a></li>
-								</ul>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-
-		</div>
-		<div class="row">
-			<div class="col text-center">
-				<div class="button_fill shows_2_button"><a href="#">plus de playlist</a></div>
 			</div>
 		</div>
 	</div>
 </div>
 
 <!-- Shows -->
-
 <div class="shows">
 	<div class="container">
 		<div class="row shows_row">
 			<!-- Show -->
+			<div class="mb-5">
+				<h2>Playlists récentes </h2>
+			</div>
 			{% for chart in three_last_chart %}
-			<div class="col-lg-4">
-				<div class="show">
+			<div class="col-lg-4 ps-4 pe-4">
+				<div class="show_chart">
 					<div class="show_image">
 						<a href="{{ path('show_chart', {chartSiteId: chart.chartSite.id, chartId: chart.id}) }}">
 							<img src="{{ uploaded_asset(chart.imageFileName) }}" alt="https://unsplash.com/@icons8">
 						</a>
 						<div class="show_tags">
 							<div class="tags">
-								<ul class="d-flex flex-row align-items-start justify-content-start">
+								<ul class="show-chart-tag d-flex flex-row align-items-start justify-content-start">
 									<li><a href="{{ chart.url }}" target="_blank">{{ chart.chartSite.name }}</a></li>
 								</ul>
 							</div>
 						</div>
-						<div class="show_play_icon"><img src="images/play.svg" alt="https://www.flaticon.com/authors/cole-bemis"></div>
+
 					</div>
 					<div class="show_content">
 						<div class="show_title">
@@ -202,7 +105,6 @@
 </div>
 
 <!-- Bi Weekly -->
-
 <div class="weekly">
 	<div class="parallax_background parallax-window" data-parallax="scroll" data-image-src="images/weekly.jpg" data-speed="0.8"></div>
 	<div class="container">
@@ -213,9 +115,9 @@
 			<div class="col-lg-6">
 				<div class="weekly_content d-flex flex-column align-items-start justify-content-lg-center justify-content-start">
 					<div>
-						<div class="weekly_title"><h1>{% trans %}Découvrir une playlist{% endtrans %}</h1></div>
+						<div class="weekly_title"><h1>{% trans %}Playlist au hasard{% endtrans %}</h1></div>
 						<div class="weekly_text">
-							<p>{% trans %}Si des playlists existent, vous trouverez ici à chaque visite une playlist sélectionnée au hasard parmi les playlists du site.{% endtrans %}</p>
+							<p>{% trans %}Découvrez ici à chaque visite une playlist sélectionnée au hasard parmi les playlists du site{% endtrans %}</p>
 						</div>
 						<div class="weekly_info">
 								<a href="{{ path('show_chart', {chartSiteId: randomChart.chartSite.id, chartId: randomChart.id}) }}">
@@ -224,7 +126,40 @@
 								<a href="{{ randomChart.url }}" target="_blank">
 									<h3>{{ randomChart.chartSite.name }}</h3>
 								</a>
+							<!-- Weekly Image -->
+							<div class="col-lg-6 d-xs-block d-md-block d-lg-none">
+								<div class="weekly_image my-5">
+									<a href="{{ path('show_chart', {chartSiteId: randomChart.chartSite.id, chartId: randomChart.id}) }}">
+										<img src="{{ uploaded_asset(randomChart.imageFileName) }}" alt="">
+									</a>
+								</div>
+							</div>
 						</div>
+						<table class="table text-light">
+							<thead>
+							<tr>
+								<th scope="col">#</th>
+								<th scope="col">Titre</th>
+								<th scope="col">Artiste</th>
+							</tr>
+							</thead>
+							<tbody>
+							{% for key, chart_song in randomChart.chartSongs|slice(0, 3) %}
+							<tr>
+								<th scope="row">{{ key + 1}}</th>
+								<td>{{ chart_song.song.name }}</td>
+								<td>{{ chart_song.song.artist.name }}</td>
+							</tr>
+							{% endfor %}
+							</tbody>
+						</table>
+
+							<div class="tags">
+								<ul class="show-chart-tag d-flex flex-row align-items-start justify-content-start">
+									<li class="align-middle"><a href="{{ path('show_chart', {chartSiteId: randomChart.chartSite.id, chartId: randomChart.id}) }}" style="font-size: 15px;">Afficher la suite</a></li>
+								</ul>
+							</div>
+
 						<div class="shops d-flex flex-row align-items-start justify-content-start flex-wrap">
 							<div class="button_border"><a href="#">Spotify</a></div>
 							<div class="button_border"><a href="#">Deezer</a></div>
@@ -235,7 +170,7 @@
 			</div>
 
 			<!-- Weekly Image -->
-			<div class="col-lg-6">
+			<div class="col-lg-6 d-none d-lg-block">
 				<div class="weekly_image">
 					<a href="{{ path('show_chart', {chartSiteId: randomChart.chartSite.id, chartId: randomChart.id}) }}">
 						<img src="{{ uploaded_asset(randomChart.imageFileName) }}" alt="">

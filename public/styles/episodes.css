@@ -956,7 +956,7 @@ i.fa-angle-left, i.fa-angle-double-left
 }
 .col-lg-4
 {
-	padding-bottom: 35px;
+	padding: 0 14px 35px 14px;
 }
 .card
 {

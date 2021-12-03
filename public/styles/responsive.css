@@ -108,10 +108,6 @@
 	{
 		display: block;
 	}
-	.weekly_image
-	{
-		margin-top: 80px;
-	}
 	.footer_content_row > div[class^='col']:not(:last-child)
 	{
 		margin-bottom: 80px;
