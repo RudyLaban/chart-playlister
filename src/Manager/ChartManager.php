@@ -7,6 +7,7 @@ namespace App\Manager;
 use App\Entity\Chart;
 use App\Entity\ChartSite;
 use App\Repository\ChartRepository;
+use App\Util\BillboardUtil;
 use Doctrine\ORM\EntityManagerInterface;
 use Goutte\Client;
 use Psr\Log\LoggerInterface;
@@ -29,6 +30,8 @@ class ChartManager
     protected $songManager;
     /** @var PlaylistChartSongManager */
     private $playlistChartSongManager;
+    /** @var BillboardUtil  */
+    private $billboardUtil;
     /** @var ChartRepository */
     protected $chartRepo;
 
@@ -45,6 +48,7 @@ class ChartManager
      * @param ArtistManager $artistManager
      * @param SongManager $songManager
      * @param PlaylistChartSongManager $playlistChartSongManager
+     * @param BillboardUtil $billboardUtil
      */
     public function __construct(
         ContainerInterface $container,
@@ -54,7 +58,8 @@ class ChartManager
         ChartSongManager $chartSongManager,
         ArtistManager $artistManager,
         SongManager $songManager,
-        PlaylistChartSongManager $playlistChartSongManager)
+        PlaylistChartSongManager $playlistChartSongManager,
+        BillboardUtil $billboardUtil)
     {
         $this->container = $container;
         $this->em = $em;
@@ -64,6 +69,7 @@ class ChartManager
         $this->artistManager = $artistManager;
         $this->songManager = $songManager;
         $this->playlistChartSongManager = $playlistChartSongManager;
+        $this->billboardUtil = $billboardUtil;
 
         $this->chartRepo = $this->em->getRepository(Chart::class);
         $this->logger = $logger;
@@ -82,9 +88,9 @@ class ChartManager
         // crawle de la page pour récupérer le site de la chart
         $chartSiteElement = $this->chartSiteManager->crawlChartSite($url);
         // crawl de la page pour récupérer la chart
-        $chartElement = $this->crawlChart($url);
-        // crawl de la page de l'url soumis par le formulaire pour récupérer un liste de ChartsSong
-        $chartSongsElements = $this->chartSongManager->dispatcher($url);
+        $chartElement = $this->billboardUtil->getNameAndUrl($url);
+        // crawl de la page de l'url soumis par le formulaire pour récupérer une liste de ChartsSong
+        $chartSongsElements = $this->billboardUtil->dispatcher($url);
         // récupération de la liste des artistes de la chart
         $artistsElementsList = $this->artistManager->artistListFormatter($chartSongsElements);
         // si le crawl ne renvoi pas d'éléments
@@ -109,25 +115,6 @@ class ChartManager
 
         // retour les Ids du ChartSite et de la Chart pour redirection vers la page de la Chart créée
         return ['chart_site' => $chartSite->getId(), 'chart' => $chart->getId()];
-    }
-
-    /**
-     * Chargé de crawler la page afin de récupérer les éléments nécessaire à la création de l'objet Chart
-     *
-     * @param String $url Url de la chart
-     * @return array Un tableau contenant les info de la Chart et son url : ['chart_name' => name, 'chart_url' => url]
-     */
-    public function crawlChart(String $url): array
-    {
-        // création du crawler
-        $client = new Client();
-        $crawler = $client->request('GET', $url);
-
-        $chartValue = $crawler->filter('meta[property="title"]')->eq(0)->attr('content');
-        $chartValue = str_ireplace(' chart', '', $chartValue);
-
-        // renvoi le nom de la chart et son url
-        return ['chart_name' => $chartValue, 'chart_url' => $url];
     }
 
     /**
