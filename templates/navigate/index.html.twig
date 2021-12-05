@@ -33,14 +33,15 @@
 				</div>
 			</div>
 			<div class="row home_row">
-				<div class="col-lg-10 offset-lg-1">
-					<div class="home_form_container text-center">
+				<div class="d-sm-flex justify-content-center">
+					<div class="p-2 text-center">
 						<a href="{{ path('chart_scanne') }}" class="m-1">
-								<button type="submit" id="chart_form_save" name="chart_form[save]" class="home_form_button button_fill">Scanner une chart</button>
+							<button type="submit" id="chart_form_save" name="chart_form[save]" class="home_form_button button_fill">Scanner une chart</button>
 						</a>
+					</div>
+					<div class="p-2 text-center">
 						<a href="{{ path('charts') }}" class="m-1">
-								<button type="submit" id="chart_form_save" name="chart_form[save]" class="home_form_button show button_fill">Voir les playlists</button>
-							</span>
+							<button type="submit" id="chart_form_save" name="chart_form[save]" class="home_form_button show button_fill">Voir les playlists</button>
 						</a>
 					</div>
 				</div>
@@ -190,5 +191,5 @@
 {% endblock %}
 
 {% block script %}
-
+	<script src="{{ asset('js/custom.js') }}"></script>
 {% endblock %}

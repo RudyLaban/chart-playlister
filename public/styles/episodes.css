@@ -700,6 +700,10 @@ section
 6. Sidebar
 *********************************/
 
+.navigation
+{
+	width: 100%;
+}
 .sidebar
 {
 	width: 100%;

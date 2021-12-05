@@ -1063,7 +1063,8 @@ input#chart_add_image_imageFile
 }
 .sidebar_list ul
 {
-	margin-top: 19px;
+	margin-top: 12px;
+	padding-left: 1rem;
 }
 .sidebar_list ul li:not(:last-of-type)
 {
@@ -1073,11 +1074,11 @@ input#chart_add_image_imageFile
 {
 	font-size: 18px;
 	font-weight: 500;
-	color: #5e5f62;
+	color: #ff3500;
 }
 .sidebar_list ul li a:hover
 {
-	color: #ff3500;
+	color: #5e5f62;
 }
 .sidebar_tags
 {
