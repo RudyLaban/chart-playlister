@@ -12,11 +12,22 @@
 			{% for label, messages in app.flashes %}
 				{% for message in messages %}
 					<div class="container alert alert-{{ label }}">
-						{{ message }}
+						{{ message|raw }}
 					</div>
 				{% endfor %}
 			{% endfor %}
 		{% endblock %}
+
+		{# gestion de l'affichage des icones spotify #}
+		{% set spotifyPlaylist = "" %}
+
+		{% for playlist in chart.playlists %}
+
+			{% if playlist.StreamingSite.id == 1 %}
+				{% set spotifyPlaylist = playlist %}
+			{% endif %}
+		{% endfor %}
+
 
 		<div class="parallax_background parallax-window" data-parallax="scroll" data-image-src="{{ asset('images/newsletter.jpg') }}" data-speed="0"></div>
 		<div class="home_container">
@@ -113,7 +124,18 @@
 							<div class="sidebar_title">Playlist de la Chart</div>
 							<ul>
 								<li>
-									<a href="{{ path('create_playlist_s', {chart: chart.id}) }}" target="_blank">Spotify<i class="fa fa-spotify" aria-hidden="true"></i></a>
+									{% if spotifyPlaylist is empty %}
+									<a href="{{ path('create_playlist_s', {chart: chart.id}) }}" id="waiting-icon-trigger" onClick="displayWaitingIcon">Spotify<i class="fa fa-spotify" aria-hidden="true"></i></a>
+									{% else %}
+									<a href="{{ spotifyPlaylist.url }}" target="_blank" id="waiting-icon-trigger" onClick="displayWaitingIcon">Spotify<i class="fa fa-spotify" aria-hidden="true"></i></a>
+									| <a href="{{ path('create_playlist_s', {chart: chart.id}) }}" ><i class="fas fa-sync-alt"></i></a>
+									{% endif %}
+{#
+
+									{% endif %}
+
+									<a href="#" id="waiting-icon-trigger" onClick="displayWaitingIcon">Spotify<i class="fa fa-spotify" aria-hidden="true"></i></a>
+#}
 								</li>
 							</ul>
 						</div>
@@ -257,6 +279,15 @@
 			</div>
 		</div>
 	</div>
+
+
+	<div class="modal fade" id="modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered modal-xl">
+			<div class="lds-facebook"><div></div><div></div><div></div></div>
+		</div>
+	</div>
+
+
 {% endblock %}
 
 {% block footer %}

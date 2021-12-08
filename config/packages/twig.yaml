@@ -1,2 +1,7 @@
 twig:
     default_path: '%kernel.project_dir%/templates'
+
+    # Register your global variables under the globals key:
+    globals:
+        cp_spotify_user: '%env(CHART_PLAYLISTER_SPOTIFY_USER_URL)%'
+
