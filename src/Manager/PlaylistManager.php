@@ -7,6 +7,7 @@ namespace App\Manager;
 use App\Entity\Chart;
 use App\Entity\Playlist;
 use App\Entity\StreamingSite;
+use App\Util\SpotifyUtil;
 use Doctrine\ORM\EntityManagerInterface;
 use SpotifyWebAPI\SpotifyWebAPI;
 
@@ -16,33 +17,39 @@ class PlaylistManager
     private $em;
     /** @var PlaylistChartSongManager */
     private $pscManager;
-    /** @var SpotifyManager */
-    private $spotifyManager;
+    /** @var SpotifyUtil */
+    private $spotifyUtil;
+    /** @var StreamingSiteManager */
+    private $streamingSiteManager;
 
-    public function __construct(EntityManagerInterface $em, PlaylistChartSongManager $pscManager, SpotifyManager $spotifyManager)
+    public function __construct(EntityManagerInterface $em, PlaylistChartSongManager $pscManager, SpotifyUtil $spotifyUtil, StreamingSiteManager $streamingSiteManager)
     {
         $this->em = $em;
 
         $this->pscManager = $pscManager;
-        $this->spotifyManager = $spotifyManager;
+        $this->streamingSiteManager = $streamingSiteManager;
+
+        $this->spotifyUtil = $spotifyUtil;
     }
 
     /**
      * Gestion de la création de la Playlist dans Chart Playlister et dans Spotify
      *
-     * @param StreamingSite $spotify
      * @param $spotifyTracks
      * @param Chart $chart
      * @param SpotifyWebAPI $api
      * @return Playlist
      */
-    public function spotifyPlaylistBuilder(StreamingSite $spotify, $spotifyTracks, Chart $chart, SpotifyWebAPI $api): Playlist
+    public function spotifyPlaylistBuilder($spotifyTracks, Chart $chart, SpotifyWebAPI $api): Playlist
     {
-        // création de la Playlist dans Chart playlister
+        // création du StreamingSite de la Playlist dans Chart playlister
+        $spotify = $this->streamingSiteManager->createSotifyInDB('Spotify');
         $playlist = $this->createPlaylist($spotify, $chart);
+
         // création de la playlist dans spotify
-        $spotifyPlaylist = $this->spotifyManager->createSpotifyPlaylist($api, $playlist, $chart);
-        // on complete la Playlist Chart Playlister avec les info de la playlist Spotify
+        $spotifyPlaylist = $this->spotifyUtil->createSpotifyPlaylist($api, $playlist, $chart);
+
+        // on complete la Playlist Chart Playlister avec les infos de la playlist Spotify
         $playlist->setExternalId($spotifyPlaylist->id);
         $playlist->setUrl($spotifyPlaylist->external_urls->spotify);
         $this->em->flush();

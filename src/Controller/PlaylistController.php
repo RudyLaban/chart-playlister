@@ -3,38 +3,31 @@
 namespace App\Controller;
 
 use App\Entity\Chart;
-use App\Entity\StreamingSite;
 use App\Manager\PlaylistManager;
-use App\Manager\SpotifyManager;
-use App\Repository\StreamingSiteRepository;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Util\SpotifyUtil;
+use App\Util\SpotifyWebAPIBuilder;
+use SpotifyWebAPI\SpotifyWebAPIAuthException;
+use SpotifyWebAPI\SpotifyWebAPIException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use SpotifyWebAPI;
 
 class PlaylistController extends AbstractController
 {
-    /** @var SpotifyManager */
-    private $spotifyManager;
+    /** @var SpotifyUtil */
+    private $spotifyUtil;
     /** @var PlaylistManager */
     private $playlistManager;
+    /** @var SpotifyWebAPIBuilder */
+    private $spotifyWebAPIBuilder;
 
-    public function __construct(SpotifyManager $spotifyManager, PlaylistManager $playlistManager)
+    public function __construct(SpotifyUtil $spotifyUtil, PlaylistManager $playlistManager, SpotifyWebAPIBuilder $spotifyWebAPIBuilder)
     {
-        $this->spotifyManager = $spotifyManager;
+        $this->spotifyUtil = $spotifyUtil;
         $this->playlistManager = $playlistManager;
+        $this->spotifyWebAPIBuilder = $spotifyWebAPIBuilder;
     }
-//    /**
-//     * @Route("/playlist", name="playlist")
-//     */
-//    public function index(): Response
-//    {
-//        return $this->render('playlist/index.html.twig', [
-//            'controller_name' => 'PlaylistController',
-//        ]);
-//    }
 
     /**
      * Création de la playlist d'une Chart (Spotify)
@@ -46,59 +39,49 @@ class PlaylistController extends AbstractController
      */
     public function createSpotifyPlaylist(SessionInterface $session, Chart $chart): Response
     {
-        if (!$chart)
-        {
+        $playlist = '';
+        if (!$chart) {
             $this->addFlash('warning', 'La Chart n\'a pas été trouvée.');
             return $this->redirectToRoute('home');
         }
 
-        // todo-rla : mettre en place un service permettant d'utiliser SpotifyWebAPI n'importe ou sans trop de code
-        $accessToken = $session->get('accessToken');
-        if( ! $accessToken )
+        // DEBUT construction de l'objet SpotifyWebAPI
+        if (!$session->get('accessCode'))
         {
-            $session->getFlashBag()->add('error', 'Accès refusé. Veuillez réessayer.');
             return $this->redirectToRoute('login');
         }
 
-        $playlist = null;
-
-        $api = new SpotifyWebAPI\SpotifyWebAPI();
-        $api->setAccessToken($accessToken);
-
-        $spotifyTracks = $this->spotifyManager->getSpotifyTracks($api, $chart);
-        // todo-rla: si $spotifyTracks ne renvoit pas d'élement, stopper la création, renvoyer sur la page de depart
-        if (!is_null($spotifyTracks) && !empty($spotifyTracks))
+        try
         {
-            $spotify = $this->spotifyManager->create();
-            $playlist = $this->playlistManager->spotifyPlaylistBuilder($spotify, $spotifyTracks, $chart, $api);
+            $api = $this->spotifyWebAPIBuilder->buildSpotifyWebAPIBuilder($session);
+        } catch (SpotifyWebAPIAuthException $e)
+        {
+            return $this->redirectToRoute('login');
+        }
+        // FIN construction de l'objet SpotifyWebAPI
 
+        // composition de la playlist
+        $spotifyTracks = $this->spotifyUtil->getSpotifyTracks($api, $chart);
+
+        // création de la playlist
+        try {
+            if (!empty($spotifyTracks))
+            {
+                $playlist = $this->playlistManager->spotifyPlaylistBuilder($spotifyTracks, $chart, $api);
+            }
+        } catch (SpotifyWebAPIException $e)
+        {
+            $this->addFlash('warning', 'La playlist n\'a pas pu être créée. Merci de laisser un commentaire pour analyse de ce cas particulier.');
+            return $this->redirectToRoute('show_chart', [
+            'chartSiteId' => $chart->getChartSite()->getId(),
+            'chartId' => $chart->getId(),
+        ]);
         }
 
-        if (!is_null($playlist)){
-            return $this->redirectToRoute('show_chart',
-                [
-                    'chartSiteId' => $chart->getChartSite()->getId(),
-                    'chartId' => $chart->getId(),
-                ]);
-        }
-
-        return $this->redirectToRoute('home');
-
-
-//        $count = 0;
-//
-//        foreach ($spotifyTracks as $element)
-//        {
-//            if(count($element) < 2)
-//            {
-//                $count++;
-//            }
-//        }
-//
-//        return $this->render('playlist/index.html.twig', [
-//            'controller_name' => 'PlaylistController',
-//            'artists' => $spotifyTracks,
-//            'count' => $count,
-//        ]);
+        $this->addFlash('success', sprintf('La playlist a été créée. Vous pouvez la retrouver <a href="%s">à cette adresse</a>.', $playlist->getUrl()));
+        return $this->redirectToRoute('show_chart', [
+            'chartSiteId' => $chart->getChartSite()->getId(),
+            'chartId' => $chart->getId(),
+            ]);
     }
 }

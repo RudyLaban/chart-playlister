@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Manager;
+namespace App\Util;
 
 
 use App\Entity\Artist;
@@ -10,29 +10,26 @@ use App\Entity\ChartSong;
 use App\Entity\Playlist;
 use App\Entity\Song;
 use App\Entity\StreamingSite;
-use App\Twig\AppExtension;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use SpotifyWebAPI\SpotifyWebAPI;
 
-class SpotifyManager
+class SpotifyUtil
 {
     private const FEATURED_ARTISTS = ["featuring", "feat", "ft", "x", "&", "and", "with"];
     /** @var EntityManagerInterface */
     private $em;
     /** @var LoggerInterface */
     private $logger;
-    /** @var AppExtension */
-    private $appExtension;
     private $uploadsPath;
 
-    public function __construct(EntityManagerInterface $em, LoggerInterface $logger, AppExtension $appExtension, $uploadsPath)
+    public function __construct(EntityManagerInterface $em, LoggerInterface $logger, $uploadsPath)
     {
         $this->em = $em;
         $this->logger = $logger;
-
-        $this->appExtension = $appExtension;
         $this->uploadsPath = $uploadsPath;
+
+
     }
 
     /**
@@ -65,7 +62,7 @@ class SpotifyManager
             // cherche les artistes dans Spotify
             $resultsArtists = $this->searchSpotifyArtist($api, $artist);
 
-            // pour chaque artistes Spotify trouvés
+            // pour chaques artistes Spotify trouvés
             if(!empty($resultsArtists->artists->items) && !is_null($resultsArtists->artists->items))
             {
                 // cherche une correspondance entre l'Artist du Song et les artistes Spotify
@@ -232,6 +229,9 @@ class SpotifyManager
         if ($playlist->getExternalId() == '')
         {
             $spotifyPlaylist = $api->createPlaylist(['name' => $playlist->getName()]);
+            $playlist->setExternalId($spotifyPlaylist->id);
+            $this->em->flush();
+
         } else
         {
             // sinon, on cherche la playlist Spotify par son id
@@ -243,26 +243,6 @@ class SpotifyManager
         $api->updatePlaylistImage($spotifyPlaylist->id, $imageData);
 
         return $spotifyPlaylist;
-    }
-
-    /**
-     * Crée l'entré Spotify en base si elle n'extiste pas encore
-     *
-     * @return StreamingSite
-     */
-    function create(): StreamingSite
-    {
-        $spotify = $this->em->getRepository(StreamingSite::class)->findOneBy(['name' => 'Spotify']);
-        if (empty($spotify)) {
-            $spotify = new StreamingSite();
-            $spotify->setName('Spotify');
-            $spotify->setUrl('https://open.spotify.com/user/shqwnshnlngy9pxha60rgxrz0?si=747c074c0bc7401c');
-
-            $this->em->persist($spotify);
-            $this->em->flush();
-        }
-
-        return $spotify;
     }
 
     /**
