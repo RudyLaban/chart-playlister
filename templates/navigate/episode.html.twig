@@ -83,7 +83,7 @@
 						<!-- DEBUT - Formulaire de changement de pochette de la Chart -->
 						{{ form_start(chartAddImageForm) }}
 						<div class="episode_image" id="get-value" >
-							<img id="chart-img" src="{{ uploaded_asset(chart.imageFileName) }}" alt="">
+							<img id="chart-img" src="{{ uploaded_asset(chart.imageFileName)|imagine_filter('my_thumb') }}" alt="">
 							<div class="overlay">
 								<div class="text">Changer la pochette</div>
 							</div>

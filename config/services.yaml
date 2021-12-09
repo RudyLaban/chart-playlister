@@ -13,7 +13,10 @@ services:
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
         #
         bind:
+            # chemin vers les pochettes uploadées
             $uploadsPath: '%kernel.project_dir%/public/uploads'
+            # chemin vers les thumbnails de pochettes
+            $thumbnailPath: '%kernel.project_dir%/public/media/cache/my_thumb/uploads'
             $publicUploadFilesystem: '@oneup_flysystem.public_uploads_filesystem_filesystem'
             $spotifyClientId: '%env(resolve:CLIENT_ID)%'
             $spotifyClientSecret: '%env(resolve:CLIENT_SECRET)%'

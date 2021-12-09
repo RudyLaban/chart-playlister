@@ -11,6 +11,7 @@ use App\Entity\Playlist;
 use App\Entity\Song;
 use App\Entity\StreamingSite;
 use Doctrine\ORM\EntityManagerInterface;
+use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Psr\Log\LoggerInterface;
 use SpotifyWebAPI\SpotifyWebAPI;
 
@@ -21,15 +22,13 @@ class SpotifyUtil
     private $em;
     /** @var LoggerInterface */
     private $logger;
-    private $uploadsPath;
+    private $thumbnailPath;
 
-    public function __construct(EntityManagerInterface $em, LoggerInterface $logger, $uploadsPath)
+    public function __construct(EntityManagerInterface $em, LoggerInterface $logger, $thumbnailPath)
     {
         $this->em = $em;
         $this->logger = $logger;
-        $this->uploadsPath = $uploadsPath;
-
-
+        $this->thumbnailPath = $thumbnailPath;
     }
 
     /**
@@ -237,8 +236,9 @@ class SpotifyUtil
             // sinon, on cherche la playlist Spotify par son id
             $spotifyPlaylist = $api->getPlaylist($playlist->getExternalId());
         }
-        // maj de la pochette
-        $imagePath = $this->uploadsPath.'/'.$chart->getImageFileName();
+
+        // upload de la pochette via un thumbnail léger
+        $imagePath = $this->thumbnailPath.'/'.$chart->getImageFileName();
         $imageData = base64_encode(file_get_contents($imagePath));
         $api->updatePlaylistImage($spotifyPlaylist->id, $imageData);
 
