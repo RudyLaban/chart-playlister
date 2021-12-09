@@ -39,6 +39,14 @@ class PlaylistController extends AbstractController
      */
     public function createSpotifyPlaylist(SessionInterface $session, Chart $chart): Response
     {
+        // stock en session l'url menant à la chart pour l'afficher après connexion à Spotify
+        $currentChartRoute = $this->generateUrl('show_chart', [
+            'chartSiteId' => $chart->getChartSite()->getId(),
+            'chartId' => $chart->getId(),
+        ]);
+
+        $session->set('chart_origin_route', $currentChartRoute);
+
         $playlist = '';
         if (!$chart) {
             $this->addFlash('warning', 'La Chart n\'a pas été trouvée.');

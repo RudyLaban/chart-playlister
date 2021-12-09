@@ -97,6 +97,17 @@ class AuthController extends AbstractController
         $refreshToken = $this->spotify->getRefreshToken();
         $session->set('refreshToken', $refreshToken); // symfony session
 
+        // si on vient d'une chart, redirection vers celle-ci
+        if($session->get('chart_origin_route'))
+        {
+            //récupère puis vide l'attribut chart_origin_route de la session
+            $chartOriginRoute = $session->get('chart_origin_route');
+            $session->remove('chart_origin_route');
+
+            $this->addFlash('success', 'Connexion réussi ! Vous pouvez maintenant créer une playlist Spotify avec cette chart.');
+            return $this->redirect($chartOriginRoute);
+        }
+
         return $this->redirectToRoute('profile');
     }
 
