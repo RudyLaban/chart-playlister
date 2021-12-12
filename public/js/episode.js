@@ -243,7 +243,17 @@ function readURL(){
 	}
 }
 
-// fadeOut sur le flash message
+// fadeOut sur le flash message (addFlach)
 $(document).ready(function(){
-	$('.alert').fadeIn().delay(5000).fadeOut();
+	$('.alert').fadeIn().delay(10000).fadeOut();
+});
+
+// icône de chargement
+$(function(){
+	$('#modal-spinner, #chart_form_save').on('click', function(){
+		//document.getElementById('load-chart').style.display = 'block';
+		document.getElementById('boot-spinner').style.display = 'block'; // alternative Bootstrap
+
+		//$('<div class="text-right" style="height:0"><div class="loading-gif"><img src="/images/loading.gif"></div></div>').prependTo(document.body);
+	});
 });

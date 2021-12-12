@@ -86,7 +86,7 @@ class PlaylistController extends AbstractController
         ]);
         }
 
-        $this->addFlash('success', sprintf('La playlist a été créée. Vous pouvez la retrouver <a href="%s">à cette adresse</a>.', $playlist->getUrl()));
+        $this->addFlash('success', sprintf('La playlist a été créée. Vous pouvez la retrouver <a href="%s" target="_blank">à cette adresse</a>.', $playlist->getUrl()));
         return $this->redirectToRoute('show_chart', [
             'chartSiteId' => $chart->getChartSite()->getId(),
             'chartId' => $chart->getId(),

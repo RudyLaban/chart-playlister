@@ -339,6 +339,25 @@
 	{
 		top: -75px;
 	}
+	/* icône de chargement */
+	.ldio {
+		transform-origin: 45px 45px!important
+	}
+	.loadingio-spinner-bar-chart {
+		width: 45px;
+		height: 45px;
+		top: 9px;
+		right: 47px;
+	}
+	.ldio {
+		transform: translateZ(0) scale(0.45);
+	}
+	/** Alternative bootstrap **/
+	#boot-spinner {
+		top: 19px;
+		right: 50px;
+	}
+	/* Fin icône de chargement */
 }
 
 /************

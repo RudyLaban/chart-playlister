@@ -6,8 +6,21 @@
 {% endblock %}
 
 {% block body %}
+	{# <div class="text-right" style="height:0"><div class="loading-gif"><img src="/images/loading.gif"></div></div> #}
 	<!-- Home -->
 	<div class="home">
+
+		<!-- Loading icône -->
+		{% block loadicone %}
+			{% embed "load-icone.html.twig" %}{% endembed %}
+		{% endblock %}
+		{# Alternative Bootstrap #}
+		<div class="spinner-border text-warning" id="boot-spinner" role="status">
+			<div>
+				<span class="visually-hidden">Loading...</span>
+			</div>
+		</div>
+
 		{% block flashMessage %}
 			{% for label, messages in app.flashes %}
 				{% for message in messages %}
@@ -124,18 +137,13 @@
 							<div class="sidebar_title">Playlist de la Chart</div>
 							<ul>
 								<li>
-									{% if spotifyPlaylist is empty %}
-									<a href="{{ path('create_playlist_s', {chart: chart.id}) }}" id="waiting-icon-trigger" onClick="displayWaitingIcon">Spotify<i class="fa fa-spotify" aria-hidden="true"></i></a>
+									{% if spotifyPlaylist.url is empty or spotifyPlaylist.externalId is empty %}
+										<a href="{{ path('create_playlist_s', {chart: chart.id}) }}" id="modal-spinner">Spotify<i class="fa fa-spotify" aria-hidden="true"></i></a>
 									{% else %}
-									<a href="{{ spotifyPlaylist.url }}" target="_blank" id="waiting-icon-trigger" onClick="displayWaitingIcon">Spotify<i class="fa fa-spotify" aria-hidden="true"></i></a>
-									| <a href="{{ path('create_playlist_s', {chart: chart.id}) }}" ><i class="fas fa-sync-alt"></i></a>
+										<a href="{{ spotifyPlaylist.url }}" target="_blank" id="waiting-icon-trigger" onClick="displayWaitingIcon">Spotify<i class="fa fa-spotify" aria-hidden="true"></i></a>
+										<span class="mx-1">|</span>
+										<a href="{{ path('create_playlist_s', {chart: chart.id}) }}" id="modal-spinner"><i class="fas fa-sync-alt"></i></a>
 									{% endif %}
-{#
-
-									{% endif %}
-
-									<a href="#" id="waiting-icon-trigger" onClick="displayWaitingIcon">Spotify<i class="fa fa-spotify" aria-hidden="true"></i></a>
-#}
 								</li>
 							</ul>
 						</div>
@@ -281,13 +289,7 @@
 	</div>
 
 
-	<div class="modal fade" id="modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-		<div class="modal-dialog modal-dialog-centered modal-xl">
-			<div class="lds-facebook"><div></div><div></div><div></div></div>
-		</div>
-	</div>
-
-
+	<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="exampleModalLabel">Modal title</h5><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div><div class="modal-body">Woohoo, you're reading this text in a modal!</div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button><button type="button" class="btn btn-primary">Save changes</button></div></div></div></div>
 {% endblock %}
 
 {% block footer %}
