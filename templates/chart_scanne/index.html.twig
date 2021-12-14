@@ -3,6 +3,18 @@
 {% block body %}
     <!-- Home -->
     <div class="home">
+
+        <!-- Loading icône -->
+        {% block loadicone %}
+            {% embed "load-icone.html.twig" %}{% endembed %}
+        {% endblock %}
+        {# Alternative Bootstrap #}
+        <div class="spinner-border text-warning" id="boot-spinner" role="status">
+            <div>
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+
         {% block flashMessage %}
             {% for label, messages in app.flashes %}
                 {% for message in messages %}
@@ -56,3 +68,6 @@
 
 {% endblock %}
 
+{% block script %}
+    <script src="{{ asset('js/custom.js') }}"></script>
+{% endblock %}
