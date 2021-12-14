@@ -9,26 +9,30 @@ class StreamingSiteManager
 {
     /** @var EntityManagerInterface */
     protected $em;
+    /*** @var string */
+    private $cpSpotifyUserUrl;
 
     /**
      * @param EntityManagerInterface $em
      */
-    public function __construct(EntityManagerInterface $em)
+    public function __construct(EntityManagerInterface $em, string $cpSpotifyUserUrl)
     {
         $this->em = $em;
+        $this->cpSpotifyUserUrl = $cpSpotifyUserUrl;
     }
 
     /** Crée l'entré Spotify en base si elle n'extiste pas encore
-    *
-    * @return StreamingSite
-    */
-    function createSotifyInDB($name): StreamingSite
+     *
+     * @param $name
+     * @return StreamingSite
+     */
+    function createSpotifyInDB($name): StreamingSite
     {
         $spotify = $this->em->getRepository(StreamingSite::class)->findOneBy(['name' => 'Spotify']);
         if (empty($spotify)) {
             $spotify = new StreamingSite();
             $spotify->setName($name);
-            $spotify->setUrl($_ENV('CHART_PLAYLISTER_SPOTIFY_USER_URL'));
+            $spotify->setUrl($this->cpSpotifyUserUrl);
 
             $this->em->persist($spotify);
             $this->em->flush();

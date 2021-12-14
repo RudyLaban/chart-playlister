@@ -43,7 +43,7 @@ class PlaylistManager
     public function spotifyPlaylistBuilder($spotifyTracks, Chart $chart, SpotifyWebAPI $api): Playlist
     {
         // création du StreamingSite de la Playlist dans Chart playlister
-        $spotify = $this->streamingSiteManager->createSotifyInDB('Spotify');
+        $spotify = $this->streamingSiteManager->createSpotifyInDB('Spotify');
         $playlist = $this->createPlaylist($spotify, $chart);
 
         // création de la playlist dans spotify

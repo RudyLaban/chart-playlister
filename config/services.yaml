@@ -5,6 +5,8 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: fr
+    env.cp.spotify.user.url: '%env(resolve:REDIRECT_URI)%'
+
 
 services:
     # default configuration for services in *this* file
@@ -21,6 +23,7 @@ services:
             $spotifyClientId: '%env(resolve:CLIENT_ID)%'
             $spotifyClientSecret: '%env(resolve:CLIENT_SECRET)%'
             $spotifyRedirectUri: '%env(resolve:REDIRECT_URI)%'
+            $cpSpotifyUserUrl: '%env(resolve:REDIRECT_URI)%'
 
 
     # makes classes in src/ available to be used as services
