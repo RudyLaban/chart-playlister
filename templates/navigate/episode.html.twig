@@ -137,10 +137,8 @@
 							<div class="sidebar_title">Playlist de la Chart</div>
 							<ul>
 								<li>
-									{% if spotifyPlaylist %}
-										{% if spotifyPlaylist.url is empty or spotifyPlaylist.externalId is empty %}
-											<a href="{{ path('create_playlist_s', {chart: chart.id}) }}" id="modal-spinner">Spotify<i class="fa fa-spotify" aria-hidden="true"></i></a>
-										{% endif %}
+									{# Affiche les boutons de la playlist si elle existe et est valide #}
+									{% if spotifyPlaylist and spotifyPlaylist.url and spotifyPlaylist.externalId %}
 										<a href="{{ spotifyPlaylist.url }}" target="_blank" id="waiting-icon-trigger" onClick="displayWaitingIcon">Spotify<i class="fa fa-spotify" aria-hidden="true"></i></a>
 										<span class="mx-1">|</span>
 										<a href="{{ path('create_playlist_s', {chart: chart.id}) }}" id="modal-spinner"><i class="fas fa-sync-alt"></i></a>

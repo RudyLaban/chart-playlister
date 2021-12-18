@@ -19,6 +19,7 @@ services:
             $uploadsPath: '%kernel.project_dir%/public/uploads'
             # chemin vers les thumbnails de pochettes
             $thumbnailPath: '%kernel.project_dir%/public/media/cache/my_thumb/uploads'
+            $defaultThumbnail: '%kernel.project_dir%/public/media/cache/my_thumb/uploads/chart_image/default_chart_image.png'
             $publicUploadFilesystem: '@oneup_flysystem.public_uploads_filesystem_filesystem'
             $spotifyClientId: '%env(resolve:CLIENT_ID)%'
             $spotifyClientSecret: '%env(resolve:CLIENT_SECRET)%'
