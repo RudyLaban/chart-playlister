@@ -163,6 +163,23 @@ section
 	position: relative;
 	box-sizing: border-box;
 }
+section.error
+{
+	background-color: #adadad;
+}
+section.error img
+{
+	width: 450px;
+}
+section h2
+{
+	color: #525252;
+}
+section p
+{
+	color: #525252;
+	font-size: 18px;
+}
 .clear
 {
 	clear: both;
