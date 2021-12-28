@@ -804,10 +804,6 @@ section
 	height: 48px;
 	border-color: #bba9ab;
 }
-.social ul li:not(:first-child)
-{
-	margin-left: 0;
-}
 .about .social ul li:not(:last-of-type)
 {
 	margin-right: 6px;
@@ -834,7 +830,7 @@ section
 .newsletter
 {
 	padding-top: 74px;
-	padding-bottom: 166px;
+	padding-bottom: 170px;
 }
 .newsletter_text
 {

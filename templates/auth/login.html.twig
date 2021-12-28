@@ -1,111 +1,50 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>Chart Playlister | Créateur de playlist</title>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="description" content="Chart Playlister | Créateur de playlist">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="{{ asset('styles/bootstrap-4.1.2/bootstrap.min.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('styles/main_styles.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('styles/responsive.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('styles/spotify_login.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('styles/spotify_login_responsive.css') }}">
-    <link rel="apple-touch-icon" sizes="57x57" href="images/favicon/apple-icon-57x57.png">
-    <link rel="apple-touch-icon" sizes="60x60" href="images/favicon/apple-icon-60x60.png">
-    <link rel="apple-touch-icon" sizes="72x72" href="images/favicon/apple-icon-72x72.png">
-    <link rel="apple-touch-icon" sizes="76x76" href="images/favicon/apple-icon-76x76.png">
-    <link rel="apple-touch-icon" sizes="114x114" href="images/favicon/apple-icon-114x114.png">
-    <link rel="apple-touch-icon" sizes="120x120" href="images/favicon/apple-icon-120x120.png">
-    <link rel="apple-touch-icon" sizes="144x144" href="images/favicon/apple-icon-144x144.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="images/favicon/apple-icon-152x152.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="images/favicon/apple-icon-180x180.png">
-    <link rel="icon" type="image/png" sizes="192x192"  href="images/favicon/android-icon-192x192.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="96x96" href="images/favicon/favicon-96x96.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon/favicon-16x16.png">
-    <link rel="manifest" href="/manifest.json">
-    <meta name="msapplication-TileColor" content="#ffffff">
-    <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
-    <meta name="theme-color" content="#ffffff">
-    <script src="https://kit.fontawesome.com/9a43e2d654.js" crossorigin="anonymous"></script>
-</head>
-<body>
+{% extends 'base.html.twig' %}
 
-<div class="super_container">
-
-    <!-- Header -->
-    {% block header %}
-        {% embed "header.html.twig" %}{% endembed %}
-    {% endblock %}
-
-    {% block body %}
-        <!-- Home -->
-        <div class="home login">
-            {% block flashMessage %}
-                {% for label, messages in app.flashes %}
-                    {% for message in messages %}
-                        <div class="container alert alert-{{ label }}">
-                            {{ message }}
-                        </div>
-                    {% endfor %}
+{% block body %}
+    <!-- Home -->
+    <div class="home login">
+        {% block flashMessage %}
+            {% for label, messages in app.flashes %}
+                {% for message in messages %}
+                    <div class="container alert alert-{{ label }}">
+                        {{ message }}
+                    </div>
                 {% endfor %}
-            {% endblock %}
+            {% endfor %}
+        {% endblock %}
 
-            <div class="background_image parallax_background parallax-window" data-parallax="scroll" data-image-src="{{ asset('images/spotify_device.jpg') }}" data-speed="0.6"></div>
-            <div class="home_container login_container">
-                <div class="container">
-                    <div class="row justify-content-center">
-                        <div class="col-lg-7">
-                            <div class="card text-center">
-                                <h3 class="card-header">
-                                    {% trans %}Connexion à Spotify{% endtrans %}
-                                </h3>
-                                <div class="card-body">
-                                    <h5 class="card-title">{% trans %}Connectez-vous à Spotify pour continuer l'opération{% endtrans %}</h5>
-                                    <div class="button_fill shows_button">
-                                        <a href="{{ spotify_auth_url }}">{% trans %}Connexion{% endtrans %}  <i class="fa fa-spotify" aria-hidden="true"></i> </a>
-                                    </div>
-                                </div>
-                                <div class="card-footer text-muted">
-                                    {% trans %}Ce site utilise <a href="https://developer.spotify.com/discover/">l'API mise à disposition par Spotify</a>{% endtrans %}
+        <div class="background_image parallax_background parallax-window" data-parallax="scroll" data-image-src="{{ asset('images/spotify_device.jpg') }}" data-speed="0.6"></div>
+        <div class="home_container login_container">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-7">
+                        <div class="card text-center">
+                            <h3 class="card-header">
+                                {% trans %}Connexion à Spotify{% endtrans %}
+                            </h3>
+                            <div class="card-body">
+                                <h5 class="card-title">{% trans %}Connectez-vous à Spotify pour continuer l'opération{% endtrans %}</h5>
+                                <div class="button_fill shows_button">
+                                    <a href="{{ spotify_auth_url }}">{% trans %}Connexion{% endtrans %}  <i class="fa fa-spotify" aria-hidden="true"></i> </a>
                                 </div>
                             </div>
-
-                            {% for flashMessage in app.session.flashbag.get('error') %}
-                                <div class="ui error message">{{ flashMessage }}</div>
-                            {% endfor %}
-
-                            {% for flashMessage in app.session.flashbag.get('success') %}
-                                <div class="ui error message">{{ flashMessage }}</div>
-                            {% endfor %}
-
+                            <div class="card-footer text-muted">
+                                {% trans %}Ce site utilise <a href="https://developer.spotify.com/discover/">l'API mise à disposition par Spotify</a>{% endtrans %}
+                            </div>
                         </div>
+
+                        {% for flashMessage in app.session.flashbag.get('error') %}
+                            <div class="ui error message">{{ flashMessage }}</div>
+                        {% endfor %}
+
+                        {% for flashMessage in app.session.flashbag.get('success') %}
+                            <div class="ui error message">{{ flashMessage }}</div>
+                        {% endfor %}
+
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 
-    {% endblock %}
-
-    <!-- Footer -->
-    {% block footer %}
-        {% embed "footer.html.twig" %}{% endembed %}
-    {% endblock %}
-</div>
-
-<script src="{{ asset('js/jquery-3.3.1.min.js') }}"></script>
-<script src="{{ asset('styles/bootstrap-4.1.2/popper.js') }}"></script>
-<script src="{{ asset('styles/bootstrap-4.1.2/bootstrap.min.js') }}"></script>
-<script src="{{ asset('plugins/greensock/TweenMax.min.js') }}"></script>
-<script src="{{ asset('plugins/greensock/TimelineMax.min.js') }}"></script>
-<script src="{{ asset('plugins/scrollmagic/ScrollMagic.min.js') }}"></script>
-<script src="{{ asset('plugins/greensock/animation.gsap.min.js') }}"></script>
-<script src="{{ asset('plugins/greensock/ScrollToPlugin.min.js') }}"></script>
-<script src="{{ asset('plugins/easing/easing.js') }}"></script>
-<script src="{{ asset('plugins/colorbox/jquery.colorbox-min.js') }}"></script>
-<script src="{{ asset('plugins/progressbar/progressbar.min.js') }}"></script>
-<script src="{{ asset('plugins/parallax-js-master/parallax.min.js') }}"></script>
-<script src="{{ asset('js/custom.js') }}"></script>
-</body>
-</html>
+{% endblock %}

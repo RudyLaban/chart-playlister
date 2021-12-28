@@ -1,18 +1,11 @@
 {% extends 'base.html.twig' %}
 
 {% block head %}
-	<link rel="stylesheet" type="text/css" href="styles/contact.css">
-	<link rel="stylesheet" type="text/css" href="styles/contact_responsive.css">
+	<link rel="stylesheet" type="text/css" href="{{ asset('styles/contact.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ asset('styles/contact_responsive.css') }}">
 {% endblock %}
 
 {% block body %}
-	<div class="super_container">
-
-	<!-- Header -->
-	{% block header %}
-		{% embed "header.html.twig" %}{% endembed %}
-	{% endblock %}
-
 	<!-- Home -->
 
 	<div class="home">
@@ -62,16 +55,6 @@ Etiam efficitur semper accumsan. Sed et dui aliquet, ultrices tellus non, sagitt
 						</div>
 					</div>
 
-					<!-- Google Map -->
-					<div class="google_map_container">
-						<div class="map">
-							<div id="google_map" class="google_map">
-								<div class="map_container">
-									<div id="map"></div>
-								</div>
-							</div>
-						</div>
-					</div>
 				</div>
 			</div>
 		</div>
@@ -103,15 +86,9 @@ Etiam efficitur semper accumsan. Sed et dui aliquet, ultrices tellus non, sagitt
 		</div>
 	</div>
 
-	<!-- Footer -->
-	{% block footer %}
-		{% embed "footer.html.twig" %}{% endembed %}
-	{% endblock %}
-</div>
+
 {% endblock %}
 
 {% block script %}
-	<script src="{{ asset('js/contact.js') }}"></script>
-	<script src="{{ asset('js/custom.js') }}"></script>
 {% endblock %}
 

@@ -1,8 +1,8 @@
 {% extends 'base.html.twig' %}
 
 {% block head %}
-	<link rel="stylesheet" type="text/css" href="styles/about.css">
-	<link rel="stylesheet" type="text/css" href="styles/about_responsive.css">
+	<link rel="stylesheet" type="text/css" href="{{ asset('styles/about.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ asset('styles/about_responsive.css') }}">
 {% endblock %}
 
 {% block body %}
@@ -150,6 +150,5 @@
 {% endblock %}
 
 {% block script %}
-	<script src="js/about.js"></script>
 {% endblock %}
 
