@@ -6,8 +6,8 @@ namespace App\Service;
 
 use App\Entity\Chart;
 use Gedmo\Sluggable\Util\Urlizer;
-use League\Flysystem\FileNotFoundException;
-use League\Flysystem\FilesystemInterface;
+use League\Flysystem\FilesystemException;
+use League\Flysystem\FilesystemOperator;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Asset\Context\RequestStackContext;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -22,20 +22,14 @@ class UploaderHelper
 {
     const CHART_IMAGE = 'chart_image';
 
-    /**
-     * @var string
-     */
-    private $publicUploadFilesystem;
-    /**
-     * @var RequestStackContext
-     */
-    private $requestStackContext;
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
+    private string|FilesystemOperator $publicUploadFilesystem;
 
-    public function __construct(FilesystemInterface $publicUploadFilesystem, RequestStackContext $requestStackContext, LoggerInterface $logger)
+    private RequestStackContext $requestStackContext;
+
+    private LoggerInterface $logger;
+
+
+    public function __construct(FilesystemOperator  $publicUploadFilesystem, RequestStackContext $requestStackContext, LoggerInterface $logger)
     {
 
         $this->publicUploadFilesystem = $publicUploadFilesystem;
@@ -46,24 +40,22 @@ class UploaderHelper
     /**
      * @param UploadedFile $uploadedFile
      * @param Chart $chart
+     * @param string|null $existingFilename
      * @return string
+     * @throws FilesystemException
      */
     public function uploadChartImage(UploadedFile $uploadedFile, Chart $chart, ?string $existingFilename): string
     {
-        //$destination = $this->publicUploadFilesystem.'/'.self::CHART_IMAGE;
-
         $originalFilename = $chart->getName();
         $newFilename = Urlizer::urlize($originalFilename).'-'.uniqid().'.'.$uploadedFile->guessExtension();
 
         $stream = fopen($uploadedFile->getPathname(), 'r');
-        $result = $this->publicUploadFilesystem->writeStream(
-            self::CHART_IMAGE.'/'.$newFilename,
-            $stream
-        );
 
-        if ($result === false)
+        try {
+            $this->publicUploadFilesystem->writeStream(self::CHART_IMAGE.'/'.$newFilename, $stream);
+        } catch (\Exception)
         {
-            throw new \Exception(sprintf('La creation du fichier uploadé "%s" à échoué', $newFilename));
+            $this->logger->alert(sprintf('La creation du fichier uploadé "%s" à échoué', $newFilename));
         }
 
         if (is_resource($stream))
@@ -74,14 +66,10 @@ class UploaderHelper
         if ($existingFilename)
         {
             try {
-                $result = $this->publicUploadFilesystem->delete($existingFilename);
-
-                if ($result === false)
-                {
-                    throw new \Exception(sprintf('La suppression de l\'ancien fichier uploadé "%s" à échoué', $existingFilename));
-                }
-            } catch (FileNotFoundException $e) {
-                $this->logger->alert(sprintf('L\'ancien fichier uploadé "%s" n\'a pas été trouvé lors de sa suppression.', $existingFilename));
+                $this->publicUploadFilesystem->delete($existingFilename);
+            } catch (\Exception)
+            {
+                $this->logger->alert(sprintf('La suppression de l\'ancien fichier uploadé "%s" à échoué.', $existingFilename));
             }
         }
 
