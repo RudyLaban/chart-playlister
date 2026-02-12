@@ -1,0 +1,25 @@
+# Environnement
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker
+docker-compose.override.yml
+
+# API (Symfony) — le .gitignore détaillé sera dans api/
+api/vendor/
+api/var/
+api/.env.local
+
+# Front (Vue) — le .gitignore détaillé sera dans front/
+front/node_modules/
+front/dist/
+EOF
