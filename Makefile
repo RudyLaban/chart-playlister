@@ -17,15 +17,30 @@ FRONT_EXEC = $(DOCKER_COMPOSE) exec front
 # -----------------------------------------------------------------------------
 
 .PHONY: install
-install: build api-deps db-create db-migrate ## Installe le projet (build + deps + DB)
-	@echo "✅ Projet installé avec succès"
+install: ## Installation complète du projet from scratch
+	@echo "🔨 Build des images Docker..."
+	$(DOCKER_COMPOSE) build
+	@echo ""
+	@echo "📦 Installation des dépendances API (Composer)..."
+	docker compose run --rm api composer install
+	@echo ""
+	@echo "📦 Installation des dépendances Front (npm)..."
+	docker compose run --rm front npm install
+	@echo ""
+	@echo "🗄️  Création de la base de données..."
+	docker compose run --rm api php bin/console doctrine:database:create --if-not-exists
+	@echo ""
+	@echo "✅ Installation terminée !"
+	@echo ""
+	@echo "👉 Lancez 'make dev' pour démarrer la stack"
 
 .PHONY: dev
 dev: ## Lance la stack de dev (docker compose up)
 	$(DOCKER_COMPOSE) up -d
 	@echo ""
 	@echo "🚀 Chart Playlister lancé !"
-	@echo "   API     → http://localhost:8080"
+	@echo "   API     → https://localhost:8443 (HTTPS)"
+	@echo "   API     → http://localhost:8080 (HTTP → redirige vers HTTPS)"
 	@echo "   Front   → http://localhost:5173"
 	@echo "   DB      → localhost:5432"
 	@echo ""
@@ -50,6 +65,10 @@ logs-api: ## Logs API uniquement
 .PHONY: logs-front
 logs-front: ## Logs front uniquement
 	$(DOCKER_COMPOSE) logs -f front
+
+.PHONY: ps
+ps: ## Vérifie l'état des containers
+	$(DOCKER_COMPOSE) ps
 
 # -----------------------------------------------------------------------------
 # Docker
@@ -98,6 +117,9 @@ db-reset: ## Reset complet DB (drop + create + migrate + fixtures)
 # -----------------------------------------------------------------------------
 # Front — Vue
 # -----------------------------------------------------------------------------
+.PHONY: front-install
+front-install: ## Installe les dépendances front (npm install)
+	$(DOCKER_COMPOSE) run --rm front npm install
 
 .PHONY: front-deps
 front-deps: ## Installe les dépendances Node (npm install)

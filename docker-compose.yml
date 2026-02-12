@@ -15,9 +15,8 @@ services:
       dockerfile: docker/api/Dockerfile
     container_name: cp-api
     ports:
-      # Port 8080 sur ton host → port 80 dans le container
-      # Accès à l'API via http://localhost:8080
-      - "8080:80"
+      - "8080:80"    # HTTP
+      - "8443:443"   # HTTPS
     volumes:
       # Monte le dossier api/ local dans /app du container
       # Tout changement dans api/ est immédiatement visible dans le container
@@ -29,6 +28,7 @@ services:
       APP_SECRET: changeme
       # Connexion PostgreSQL (le host "db" = le nom du service Docker)
       DATABASE_URL: "postgresql://chart_playlister:chart_playlister@db:5432/chart_playlister?serverVersion=16&charset=utf8"
+      SERVER_NAME: "localhost"
     depends_on:
       db:
         # Attend que PostgreSQL soit prêt avant de démarrer
@@ -52,10 +52,11 @@ services:
       - ./front:/app
       # Volume anonyme pour node_modules : empêche le host d'écraser
       # les node_modules installés dans le container (problème classique)
-      - /app/node_modules
+      - front-node-modules:/app/node_modules
     environment:
       # L'URL de l'API, utilisable dans le code Vue via import.meta.env
       VITE_API_URL: "http://localhost:8080"
+    command: npm run dev -- --host
     networks:
       - cp-network
 
@@ -89,6 +90,7 @@ services:
 # =============================================================================
 volumes:
   cp-db-data:
+  front-node-modules:
 
 # =============================================================================
 # Réseau interne (les services se voient par leur nom : api, front, db)
