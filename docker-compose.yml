@@ -1,0 +1,98 @@
+# =============================================================================
+# Docker Compose — Chart Playlister (dev)
+# =============================================================================
+# 3 services : api (FrankenPHP), front (Vite), db (PostgreSQL)
+# Réseau interne partagé, volumes pour la persistance
+
+services:
+
+  # ---------------------------------------------------------------------------
+  # API — Symfony 8 + FrankenPHP
+  # ---------------------------------------------------------------------------
+  api:
+    build:
+      context: .
+      dockerfile: docker/api/Dockerfile
+    container_name: cp-api
+    ports:
+      # Port 8080 sur ton host → port 80 dans le container
+      # Accès à l'API via http://localhost:8080
+      - "8080:80"
+    volumes:
+      # Monte le dossier api/ local dans /app du container
+      # Tout changement dans api/ est immédiatement visible dans le container
+      - ./api:/app
+    environment:
+      # Variables Symfony
+      APP_ENV: dev
+      APP_DEBUG: 1
+      APP_SECRET: changeme
+      # Connexion PostgreSQL (le host "db" = le nom du service Docker)
+      DATABASE_URL: "postgresql://chart_playlister:chart_playlister@db:5432/chart_playlister?serverVersion=16&charset=utf8"
+    depends_on:
+      db:
+        # Attend que PostgreSQL soit prêt avant de démarrer
+        condition: service_healthy
+    networks:
+      - cp-network
+
+  # ---------------------------------------------------------------------------
+  # Front — Vue 3 + Vite (dev server)
+  # ---------------------------------------------------------------------------
+  front:
+    build:
+      context: .
+      dockerfile: docker/front/Dockerfile
+    container_name: cp-front
+    ports:
+      # Port 5173 = port par défaut de Vite
+      - "5173:5173"
+    volumes:
+      # Monte le dossier front/ local dans /app du container
+      - ./front:/app
+      # Volume anonyme pour node_modules : empêche le host d'écraser
+      # les node_modules installés dans le container (problème classique)
+      - /app/node_modules
+    environment:
+      # L'URL de l'API, utilisable dans le code Vue via import.meta.env
+      VITE_API_URL: "http://localhost:8080"
+    networks:
+      - cp-network
+
+  # ---------------------------------------------------------------------------
+  # Base de données — PostgreSQL 16
+  # ---------------------------------------------------------------------------
+  db:
+    image: postgres:16-alpine
+    container_name: cp-db
+    ports:
+      # Accessible depuis ton host pour debug (pgAdmin, DBeaver, etc.)
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: chart_playlister
+      POSTGRES_USER: chart_playlister
+      POSTGRES_PASSWORD: chart_playlister
+    volumes:
+      # Volume nommé pour persister les données entre les redémarrages
+      - cp-db-data:/var/lib/postgresql/data
+    healthcheck:
+      # Docker attend que PostgreSQL réponde avant de lancer l'API
+      test: ["CMD-SHELL", "pg_isready -U chart_playlister"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - cp-network
+
+# =============================================================================
+# Volumes nommés (persistent entre les docker compose down/up)
+# =============================================================================
+volumes:
+  cp-db-data:
+
+# =============================================================================
+# Réseau interne (les services se voient par leur nom : api, front, db)
+# =============================================================================
+networks:
+  cp-network:
+    driver: bridge
