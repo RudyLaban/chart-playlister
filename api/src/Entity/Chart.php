@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ChartRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -55,10 +57,17 @@ class Chart
     #[Groups(['chart:read', 'chart:write'])]
     private ?ChartProvider $provider = null;
 
+    /**
+     * @var Collection<int, ChartEntry>
+     */
+    #[ORM\OneToMany(targetEntity: ChartEntry::class, mappedBy: 'chart', orphanRemoval: true)]
+    private Collection $entries;
+
 
     public function __construct()
     {
     $this->createdAt = new \DateTimeImmutable();
+    $this->entries = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -134,6 +143,36 @@ class Chart
     public function setProvider(?ChartProvider $provider): static
     {
         $this->provider = $provider;
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ChartEntry>
+     */
+    public function getEntries(): Collection
+    {
+        return $this->entries;
+    }
+
+    public function addEntry(ChartEntry $entry): static
+    {
+        if (!$this->entries->contains($entry)) {
+            $this->entries->add($entry);
+            $entry->setChart($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEntry(ChartEntry $entry): static
+    {
+        if ($this->entries->removeElement($entry)) {
+            // set the owning side to null (unless already changed)
+            if ($entry->getChart() === $this) {
+                $entry->setChart(null);
+            }
+        }
+
         return $this;
     }
 }

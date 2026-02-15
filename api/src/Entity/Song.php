@@ -44,10 +44,17 @@ class Song
     #[Groups(['song:read', 'song:write'])]
     private Collection $artists;
 
+    /**
+     * @var Collection<int, ChartEntry>
+     */
+    #[ORM\OneToMany(targetEntity: ChartEntry::class, mappedBy: 'song', orphanRemoval: true)]
+    private Collection $chartEntries;
+
     public function __construct()
     {
         $this->artists = new ArrayCollection();
         $this->createdAt = new \DateTimeImmutable();
+        $this->chartEntries = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -116,6 +123,36 @@ class Song
         return $this;
     }
 
+    /**
+     * @return Collection<int, ChartEntry>
+     */
+    public function getChartEntries(): Collection
+    {
+        return $this->chartEntries;
+    }
+
+    public function addChartEntry(ChartEntry $chartEntry): static
+    {
+        if (!$this->chartEntries->contains($chartEntry)) {
+            $this->chartEntries->add($chartEntry);
+            $chartEntry->setSong($this);
+        }
+
+        return $this;
+    }
+
+    public function removeChartEntry(ChartEntry $chartEntry): static
+    {
+        if ($this->chartEntries->removeElement($chartEntry)) {
+            // set the owning side to null (unless already changed)
+            if ($chartEntry->getSong() === $this) {
+                $chartEntry->setSong(null);
+            }
+        }
+
+        return $this;
+    }
+    
     /**
      * Helper pour récupérer les noms des artistes sous forme de string
      */
