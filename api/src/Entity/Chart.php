@@ -63,11 +63,18 @@ class Chart
     #[ORM\OneToMany(targetEntity: ChartEntry::class, mappedBy: 'chart', orphanRemoval: true)]
     private Collection $entries;
 
+    /**
+     * @var Collection<int, SpotifyPlaylist>
+     */
+    #[ORM\OneToMany(targetEntity: SpotifyPlaylist::class, mappedBy: 'chart')]
+    private Collection $spotifyPlaylists;
+
 
     public function __construct()
     {
     $this->createdAt = new \DateTimeImmutable();
     $this->entries = new ArrayCollection();
+    $this->spotifyPlaylists = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -170,6 +177,36 @@ class Chart
             // set the owning side to null (unless already changed)
             if ($entry->getChart() === $this) {
                 $entry->setChart(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, SpotifyPlaylist>
+     */
+    public function getSpotifyPlaylists(): Collection
+    {
+        return $this->spotifyPlaylists;
+    }
+
+    public function addSpotifyPlaylist(SpotifyPlaylist $spotifyPlaylist): static
+    {
+        if (!$this->spotifyPlaylists->contains($spotifyPlaylist)) {
+            $this->spotifyPlaylists->add($spotifyPlaylist);
+            $spotifyPlaylist->setChart($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSpotifyPlaylist(SpotifyPlaylist $spotifyPlaylist): static
+    {
+        if ($this->spotifyPlaylists->removeElement($spotifyPlaylist)) {
+            // set the owning side to null (unless already changed)
+            if ($spotifyPlaylist->getChart() === $this) {
+                $spotifyPlaylist->setChart(null);
             }
         }
 
