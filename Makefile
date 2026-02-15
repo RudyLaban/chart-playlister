@@ -9,6 +9,7 @@ DOCKER_COMPOSE = docker compose
 
 # Exécuter une commande dans le container API
 API_EXEC = $(DOCKER_COMPOSE) exec api
+PHP_CONSOLE = $(API_EXEC) php bin/console
 # Exécuter une commande dans le container Front
 FRONT_EXEC = $(DOCKER_COMPOSE) exec front
 
@@ -96,23 +97,31 @@ api-deps: ## Installe les dépendances PHP (composer install)
 
 .PHONY: db-create
 db-create: ## Crée la base de données
-	$(API_EXEC) php bin/console doctrine:database:create --if-not-exists
+	$(PHP_CONSOLE) doctrine:database:create --if-not-exists
 
 .PHONY: db-migrate
 db-migrate: ## Exécute les migrations
-	$(API_EXEC) php bin/console doctrine:migrations:migrate --no-interaction
+	$(PHP_CONSOLE) doctrine:migrations:migrate --no-interaction
 
 .PHONY: db-fixtures
 db-fixtures: ## Charge les fixtures
-	$(API_EXEC) php bin/console doctrine:fixtures:load --no-interaction
+	$(PHP_CONSOLE) doctrine:fixtures:load --no-interaction
 
 .PHONY: db-reset
 db-reset: ## Reset complet DB (drop + create + migrate + fixtures)
-	$(API_EXEC) php bin/console doctrine:database:drop --force --if-exists
-	$(API_EXEC) php bin/console doctrine:database:create
-	$(API_EXEC) php bin/console doctrine:migrations:migrate --no-interaction
-	$(API_EXEC) php bin/console doctrine:fixtures:load --no-interaction
+	$(PHP_CONSOLE) doctrine:database:drop --force --if-exists
+	$(PHP_CONSOLE) doctrine:database:create
+	$(PHP_CONSOLE) doctrine:migrations:migrate --no-interaction
+	$(PHP_CONSOLE) doctrine:fixtures:load --no-interaction
 	@echo "✅ Base de données réinitialisée"
+
+.PHONY: sf
+sf: ## Exécute une commande Symfony dans le container API (ex: make sf PARAM=make:entity)
+	@if [ -z "$(PARAM)" ]; then \
+		echo "❌ PARAM manquant. Exemple : make sf PARAM=make:entity"; \
+		exit 1; \
+	fi
+	$(PHP_CONSOLE) $(PARAM)
 
 # -----------------------------------------------------------------------------
 # Front — Vue
@@ -165,7 +174,7 @@ test-front: ## Tests Front (Vitest)
 
 .PHONY: scrape
 scrape: ## Lance le scraping de tous les providers actifs
-	$(API_EXEC) php bin/console app:scrape-charts
+	$(PHP_CONSOLE) app:scrape-charts
 
 # -----------------------------------------------------------------------------
 # Aide
