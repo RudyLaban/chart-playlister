@@ -109,12 +109,12 @@ class ChartProvider
         return $this;
     }
 
-    public function getScrapingConfige(): ?array
+    public function getScrapingConfig(): ?array
     {
         return $this->scrapingConfig;
     }
 
-    public function setScrapingConfige(?array $scrapingConfig): static
+    public function setScrapingConfig(?array $scrapingConfig): static
     {
         $this->scrapingConfig = $scrapingConfig;
         return $this;
