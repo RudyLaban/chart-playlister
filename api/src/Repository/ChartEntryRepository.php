@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Chart;
 use App\Entity\ChartEntry;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -16,28 +17,27 @@ class ChartEntryRepository extends ServiceEntityRepository
         parent::__construct($registry, ChartEntry::class);
     }
 
-    //    /**
-    //     * @return ChartEntry[] Returns an array of ChartEntry objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('c')
-    //            ->andWhere('c.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('c.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    /**
+     * Trouve les entries d'une chart, avec filtre optionnel par date
+     *
+     * @param Chart $chart
+     * @param \DateTimeImmutable|null $snapshotDate
+     * @param int $limit
+     * @return ChartEntry[]
+     */
+    public function findByChartAndDate(Chart $chart, ?\DateTimeImmutable $snapshotDate = null, int $limit = 100): array
+    {
+        $qb = $this->createQueryBuilder('e')
+            ->where('e.chart = :chart')
+            ->setParameter('chart', $chart)
+            ->orderBy('e.position', 'ASC')
+            ->setMaxResults($limit);
 
-    //    public function findOneBySomeField($value): ?ChartEntry
-    //    {
-    //        return $this->createQueryBuilder('c')
-    //            ->andWhere('c.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+        if ($snapshotDate) {
+            $qb->andWhere('e.snapshotDate = :date')
+               ->setParameter('date', $snapshotDate);
+        }
+
+        return $qb->getQuery()->getResult();
+    }
 }

@@ -15,13 +15,13 @@ class Artist
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['artist:read', 'song:read', 'entry:read'])]
+    #[Groups(['artist:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message: 'Le nom de l\'artiste est obligatoire')]
     #[Assert\Length(max: 255)]
-    #[Groups(['artist:read', 'artist:write', 'song:read', 'entry:read'])]
+    #[Groups(['artist:read', 'artist:write'])]
     private ?string $name = null;
 
     #[ORM\Column(length: 100, unique: true, nullable: true)]

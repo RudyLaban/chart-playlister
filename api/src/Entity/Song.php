@@ -17,13 +17,13 @@ class Song
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['song:read', 'entry:read'])]
+    #[Groups(['song:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message: 'Le titre est obligatoire')]
     #[Assert\Length(max: 255)]
-    #[Groups(['song:read', 'song:write', 'entry:read'])]
+    #[Groups(['song:read', 'song:write'])]
     private ?string $title = null;
 
     #[ORM\Column(length: 100, unique: true, nullable: true)]
