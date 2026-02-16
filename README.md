@@ -58,7 +58,31 @@ chart-playlister/
 └── docker-compose.yml
 ```
 
-### Workflow Git
+## 📡 API Endpoints
+
+### Health
+- `GET /api/health` - Vérifier que l'API fonctionne
+
+### Providers
+- `GET /api/providers` - Liste des providers actifs
+- `GET /api/providers/{id}` - Détails d'un provider
+- `GET /api/providers/{id}/charts` - Charts d'un provider
+
+### Charts
+- `GET /api/charts` - Liste toutes les charts
+- `GET /api/charts/{id}` - Détails d'une chart
+- `GET /api/charts/{id}/entries?date=YYYY-MM-DD&limit=100` - Entries d'un chart
+
+**Exemples :**
+```bash
+# Liste des providers
+curl https://localhost:8443/api/providers
+
+# Entries du Hot 100 au 16/02/2026
+curl "https://localhost:8443/api/charts/1/entries?date=2026-02-16&limit=20"
+```
+
+## Workflow Git
 
 - `main` : Production (protégée)
 - `develop` : Intégration (branche de travail)
